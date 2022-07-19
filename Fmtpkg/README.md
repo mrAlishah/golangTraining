@@ -3,13 +3,19 @@
 <br>
 
 %d=>for int=>decimal
-
+<br>
 %s=>for string
+
 %g=>for float
+
 %e & %E =>for scientific values like constant
+
 %b=>convert base 10 to base 2
+
 %o=>convert base 10 to base 8=>octal
+
 %O=>convert base 10 to base 8 with 0o prefix
+
 %%=>no value just type %
 %x=>convert base 10 to base 16=> upper-case letters for A-F
 %X=>convert base 10 to base 16=>hexadecimal
