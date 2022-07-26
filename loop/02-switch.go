@@ -92,18 +92,41 @@ randloop:
 reandloop:
 	for {
 		switch h := rand.Intn(100); {
-		case h%2 == 0:
+		case h%3 == 0:
 			fmt.Printf("Generated even number %d\n", h)
 			break reandloop
 
 			fallthrough
 
-		case h%3 == 0:
+		case h%2 == 0:
 			fmt.Printf("Generated even number %d\n", h)
 			break reandloop
 
 		}
 	}
 	//==========================================================
+	fmt.Println("=>part8:print number in range 0 to 100 which dividable to 2 or 3 or 6")
+	for i := 0; i <= 100; i++ {
+		switch {
+		case i%2 == 0:
+			fmt.Printf("%d dividable to 2\n", i)
+		case i%3 == 0:
+			fmt.Printf("%d dividable to 3\n ", i)
+		case i%6 == 0:
+			fmt.Printf("%d dividable to 6\n ", i)
+
+		}
+	}
+	//==========================================================
+	fmt.Println("=>part9:print number in range 0 to 100 which dividable to 2 and 3 and 6")
+
+	for i := 0; i <= 100; i++ {
+		switch {
+		case i%2 == 0 && i%3 == 0 && i%6 == 0:
+			fmt.Printf("%d dividable to 2&3&6\n", i)
+
+		}
+	}
+	//============================================================
 
 }
