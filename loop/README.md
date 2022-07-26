@@ -68,9 +68,19 @@ func main() {
 }
 ```
 # switch statement
+
 ==>conditional statement
+<br>
 1)Duplicate cases are not allowed
+<br>
 2)Multiple expressions in case
+<br>
 3)Expressionless switch==>The expression in a switch is optional and it can be omitted
 
 
+# fallthrough
+
+
+fallthrough cannot be used in the **last case** of a switch since there are no more cases to fallthrough. 
+<br>If fallthrough is present in the last case, it will result in the following compilation error.
+<br>this problem is evident in 03 part 2

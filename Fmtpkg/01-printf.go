@@ -33,4 +33,19 @@ func main() {
 	fmt.Printf("format for scientific notation%E\n ", num4)
 	fmt.Printf("float format %.5f\n", num5)
 	//-------------------------------------------------------------------------
+	fmt.Println("===============================================")
+	fmt.Println("this example changes our age from year to day ")
+
+	var favcolor = "blue"
+	fmt.Println("my favorite color is ", favcolor)
+	birthYear, ageInYears := 2001, 21
+	fmt.Println("Born in ", birthYear, "aged", ageInYears)
+	var (
+		firstInitial = 'F'
+		lastInitial  = 'J'
+	)
+	fmt.Println("Initials=", firstInitial, lastInitial)
+	var ageInDays int
+	ageInDays = 365 * ageInYears
+	fmt.Println("I am", ageInDays, "days old")
 }
