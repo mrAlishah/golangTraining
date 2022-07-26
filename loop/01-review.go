@@ -20,20 +20,23 @@ func main() {
 		fmt.Println("%d", k)
 	}
 	//--------------------------------------
-	fmt.Println("=>nested for")
+	fmt.Println("=>simple for")
 	for n := 0; n < 100; n++ {
 		if n%2 == 0 {
 			continue
 		}
-		for n := 0; n < 10; n++ {
-			if n%3 == 0 {
-				continue
-			}
-		}
 		fmt.Println("%d", n)
 	}
 	//--------------------------------------
-	fmt.Println("=>normal nested")
+	fmt.Println("=>number of divided to 6")
+	for ii := 0; ii <= 100; ii++ {
+		if ii%6 == 0 {
+			fmt.Printf("%d\t", ii)
+		}
+	}
+	//--------------------------------------
+
+	fmt.Println("\n=>normal nested")
 	for b := 0; b < 3; b++ {
 		for c := 1; c < 4; c++ {
 			fmt.Printf("b = %d,  c = %d\n", b, c)
@@ -89,5 +92,23 @@ outer:
 		}
 	}
 	//-------------------------------------
-
+	fmt.Println("simple example when we have same variable in and out side of loop")
+	for n := 1; n <= 5; n++ {
+		for n := 1; n <= 3; n++ {
+			fmt.Println("n1:", n)
+		}
+		fmt.Println("====================")
+		fmt.Println("n2:", n)
+	}
+	//above example run correctly & print -n-
+	//---------------------------------------
+	fmt.Println("infinite loop ")
+	for n := 1; n <= 5; n++ {
+		for n = 1; n <= 3; n++ {
+			fmt.Println("n1:", n)
+		}
+		fmt.Println("====================")
+		fmt.Println("n2:", n)
+	}
+	//Above example shows that when we omit : compiler thinks internal variable is a new variable
 }
