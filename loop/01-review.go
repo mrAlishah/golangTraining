@@ -84,7 +84,7 @@ outer:
 		}
 
 	}
-	//------------------------------------
+	//	//------------------------------------
 	fmt.Println("=>create a simple calculator")
 	for D := 0; D <= 5; D++ {
 		for V := 0; V <= 5; V++ {
@@ -97,18 +97,24 @@ outer:
 		for n := 1; n <= 3; n++ {
 			fmt.Println("n1:", n)
 		}
-		fmt.Println("====================")
 		fmt.Println("n2:", n)
+		fmt.Println("====================")
+
 	}
 	//above example run correctly & print -n-
 	//---------------------------------------
-	fmt.Println("infinite loop ")
+	/* fmt.Println("infinite loop ")
 	for n := 1; n <= 5; n++ {
 		for n = 1; n <= 3; n++ {
 			fmt.Println("n1:", n)
 		}
-		fmt.Println("====================")
 		fmt.Println("n2:", n)
-	}
+		fmt.Println("====================")
+
+	}*/ //this loop is infinite so i command that
 	//Above example shows that when we omit : compiler thinks internal variable is a new variable
+	//----------------------------------------
+
+	//----------------------------------------
+
 }

@@ -40,6 +40,7 @@ func main() {
 	fmt.Println("=>Part2")
 
 	var numbi int
+	fmt.Println("Enter a number:")
 	fmt.Scanf("%d", &numbi)
 
 	switch {

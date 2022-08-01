@@ -44,7 +44,7 @@ func main() {
 		firstInitial = 'F'
 		lastInitial  = 'J'
 	)
-	fmt.Println("Initials=", firstInitial, lastInitial)
+	fmt.Println("Initials=", firstInitial	, lastInitial)
 	var ageInDays int
 	ageInDays = 365 * ageInYears
 	fmt.Println("I am", ageInDays, "days old")
