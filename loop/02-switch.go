@@ -42,7 +42,7 @@ func main() {
 
 	}
 	//----------------------------------------------------
-	fmt.Println("part4:use switch with scanf")
+	fmt.Println("part4:Enter your first name") //use switch with scanf
 	var i string
 	fmt.Scanf("%s", &i)
 	switch i {
@@ -127,6 +127,25 @@ reandloop:
 
 		}
 	}
+
 	//============================================================
 
+	fmt.Println("========================================")
+	fmt.Println("Enter your age:")
+	var age int
+	fmt.Scanf("%d", &age)
+	switch {
+	case age == 0:
+		fmt.Println("newborn")
+	case age >= 1 && age <= 3:
+		fmt.Println("toddler")
+	case age < 13:
+		fmt.Println("child")
+	case age < 18:
+		fmt.Println("teenager")
+	default:
+
+		fmt.Println("adult")
+
+	}
 }
