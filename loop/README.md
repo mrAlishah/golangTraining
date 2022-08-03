@@ -84,3 +84,5 @@ func main() {
 fallthrough cannot be used in the **last case** of a switch since there are no more cases to fallthrough. 
 <br>If fallthrough is present in the last case, it will result in the following compilation error.
 <br>this problem is evident in 03 part 2
+
+<br>

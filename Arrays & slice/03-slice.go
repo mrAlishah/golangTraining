@@ -8,8 +8,8 @@ func main() {
 	a := [...]int16{45, 3, 13, 14, 8, 21, 31, 78, 10, 36} //made array 'a' type int
 	var b []int16 = a[1:4]                                //made slice 'b'
 	fmt.Println("made slice from a", b)
-	c := [3]string{"Multidimensional", "Readability", "reuse"} //made slice c=>type string
-	var d []string = c[1:3]                                    //made slice 'b'
+	c := [3]string{"Multidimensional", "Readability", "reuse"} //made array c=>type string
+	var d []string = c[1:3]                                    //made slice 'd'
 	fmt.Println("made slice from c", d)
 	disis := a[2:6]                //made slice 'disis'
 	fmt.Println("array before", a) //print disis before change
@@ -33,11 +33,14 @@ func main() {
 	fmt.Println("h is a slice", h)
 	fmt.Println("=====================================================")
 	FJ := make([]int, 5, 6)
-	fmt.Println(FJ) //so use make for making new slice
+	FJ[0] = 20
+	FJ[1] = 455
+
+	fmt.Println("FJ slice:", FJ) //so use make for making new slice
 	fmt.Println("=====================================================")
 	fmt.Println("example number 45")
 	DS := []string{"41", "12", "86", "73"} //if put ... in [] return error because we can appened to slice not arrays
-	fmt.Printf("len is:%d,cap is:%d", len(DS), cap(DS))
+	fmt.Printf("type:%T,len is:%d,cap is:%d", DS, len(DS), cap(DS))
 	DS = append(DS, "20")
 
 	fmt.Printf("len is:%d,cap is:%d", len(DS), cap(DS))

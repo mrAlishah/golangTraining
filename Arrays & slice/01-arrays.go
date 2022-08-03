@@ -72,7 +72,7 @@ func main() {
 
 	arra := [5]float64{32, 0, 45465.564}
 	for _, tsi := range arra {
-		fmt.Println("\nvalue", tsi) //ignore the index
+		fmt.Println("\nvalue", tsi) //ignore the index=>use _
 
 	}
 	fmt.Println("==================================================")
