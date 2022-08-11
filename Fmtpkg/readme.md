@@ -51,6 +51,16 @@ Ex:
 
 %p=>to print a representation of a pointer
 
+## scan functions
+### Scan
+... Input ： Read the value separated by **white space** and return it to the address for modification , **Line breaks** are   treated as white space
+... Return value ： Error handling , One of the return values is int The value of type is to return the correct number , There is one err Is the reason for the mistake 
+
+### Scanln
+... Scanln similar Scan, But it **stops scanning when it encounters a newline** . The last data must be followed by a newline or end position . The usage scenario is that it ends as long as the line breaks 
+
+### scanf
+... It is associated with Scan More **rigorous** than , Use format Read whitespace , When inputting, you must also input the data to be input, The order format cannot be changed 
 
 # print function
 | function | Description  | ex                         | output     |
