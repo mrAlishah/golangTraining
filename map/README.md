@@ -56,8 +56,10 @@ delete(map, key) is the syntax to delete key from a map. The delete function doe
 # Length of the map
 using the len function
 
-# vert important point 
-Similar to slices, maps are reference types.
+# very important point 
+**Similar to slices, maps are reference types.**<br>
+Similar is the case when maps are passed as parameters to functions.<br>
+When any change is made to the map inside the function, it will be visible to the caller also.
 look at example number 87   
  # Maps equality
 Maps can't be compared using the == operator. The == can be only used to check if a map is nil.

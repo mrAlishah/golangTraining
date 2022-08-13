@@ -9,6 +9,7 @@ func main() {
 	var monthh string
 	var yearr int
 	fmt.Scanf("%d", &dayy)
+
 	fmt.Scanf("%s", &monthh)
 	fmt.Scanf("%d", &yearr)
 	fmt.Printf("day :%d,month: %s,year: %d\n", dayy, monthh, yearr)
