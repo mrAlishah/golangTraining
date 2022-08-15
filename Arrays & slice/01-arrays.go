@@ -37,8 +37,8 @@ func main() {
 	h[0] = "USA"
 	//h[6]="Germany"=>we cant do that because this is index 6 but we have 5 index
 
-	fmt.Println(h)
 	fmt.Println(g)
+	fmt.Println(h)
 
 	//arrays are value type
 	fmt.Println("==================================================")
