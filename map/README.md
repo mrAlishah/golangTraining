@@ -1,7 +1,8 @@
 # How to create a map?
 
 syn:
-```   make(map[type of key]type of value)
+``` 
+  make(map[type of key]type of value)
 ```
 # Adding items to a map
 syn:

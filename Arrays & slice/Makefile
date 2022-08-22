@@ -10,5 +10,10 @@
 04:
 	echo "learn about Variadic Functions"
 	go run 04-variadic.go
-
+05:
+	go run 05-slice.go
+06:
+	go run 06-slice.go
+07:
+	go run 07-slice.go
 

@@ -12,6 +12,6 @@ func main() {
 	c := new(int)
 	fmt.Printf("Size value is %d, type is %T, address is %v\n", *c, c, c)
 	*c = 78
-	fmt.Println("new size", *c)
+	fmt.Println("new size:", *c)
 
 }

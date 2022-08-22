@@ -11,12 +11,12 @@ func main() {
 	c := [3]string{"Multidimensional", "Readability", "reuse"} //made array c=>type string
 	var d []string = c[1:3]                                    //made slice 'd'
 	fmt.Println("made slice from c", d)
-	disis := a[2:6]                //made slice 'disis'
-	fmt.Println("array before", a) //print disis before change
+	disis := a[2:6]                  //made slice 'disis'
+	fmt.Println("array a before", a) //print disis before change
 	for i := range disis {
 		disis[i]++
 	}
-	fmt.Println("array after", disis) //print disis after change
+	fmt.Println("array a after", disis) //print disis after change
 	dil := a
 	dil[1] = 150
 	fmt.Println("dil is", dil) //dil is a copy of a but index 1 is 150
@@ -25,8 +25,8 @@ func main() {
 	//capacity
 	e := [...]string{"parham", "mahdi", "mostafa", "shiva", "shima", "saeid", "fateme"}
 	f := e[2:6]
-	fmt.Printf("length: %d,capacity:%d ", len(e), cap(e))
-	fmt.Printf("length: %d,capacity:%d \n", len(f), cap(f))
+	fmt.Printf("length e: %d,capacity e: %d ", len(e), cap(e))
+	fmt.Printf("length f: %d,capacity f:%d \n", len(f), cap(f))
 	fmt.Println("=====================================================")
 	g := [...]string{"a1", "a2", "a3"}
 	var h []string = g[1:2]
@@ -40,12 +40,12 @@ func main() {
 	fmt.Println("=====================================================")
 	fmt.Println("example number 45")
 	DS := []string{"41", "12", "86", "73"} //if put ... in [] return error because we can appened to slice not arrays
-	fmt.Printf("type:%T,len is:%d,cap is:%d", DS, len(DS), cap(DS))
+	fmt.Printf("type:%T,len is:%d,cap is:%d\n", DS, len(DS), cap(DS))
 	DS = append(DS, "20")
 
-	fmt.Printf("len is:%d,cap is:%d", len(DS), cap(DS))
+	fmt.Printf("len is:%d,cap is:%d\n", len(DS), cap(DS))
 
-	//=================================================================================
+	fmt.Println("=================================================================================")
 	cars := []string{"Ferrari", "Honda", "Ford"}
 	fmt.Println("cars:", cars, "has old length", len(cars), "and capacity", cap(cars)) //capacity of cars is 3
 	cars = append(cars, "Toyota")
@@ -57,7 +57,7 @@ func main() {
 	if sens == nil {
 		fmt.Println("slice is nil going to append")
 		sens = append(sens, "this", "1", "is", "big", "one")
-		fmt.Println("names contents", sens)
+		fmt.Println("sens contents", sens)
 		Hs := []string{"do", "it", "by", "yourself"}
 		Js := []string{"one", "two"}
 		VS := append(Hs, Js...)
