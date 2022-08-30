@@ -5,7 +5,7 @@ import "fmt"
 func Printarray(a [3][2]float64) {
 	for _, b := range a {
 		for _, c := range b {
-			fmt.Printf("%f ", c)
+			fmt.Printf("%.3f ", c)
 		}
 		fmt.Printf("\n")
 

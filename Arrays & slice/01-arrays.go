@@ -6,7 +6,7 @@ func main() {
 	var a [5]int
 	fmt.Println(a)
 	//when we use this format go fill array with 0
-	var b [5]float64
+	var b [5]string
 	fmt.Println(b)
 	fmt.Println("==================================================")
 
@@ -20,10 +20,10 @@ func main() {
 	fmt.Println(c)
 	fmt.Println("==================================================")
 
-	d := [3]float64{4.23, 7, 8.9}
+	d := [5]float64{4.23, 7, 8.9}
 	fmt.Println(d)
 	//short hand declaration
-	e := [3]float64{4.2595635}
+	e := [3]string{"4.2595635"}
 	//when we have size 3 and just assign 1 number so other number assign 0 by default
 	fmt.Println(e)
 	fmt.Println("==================================================")
@@ -66,13 +66,13 @@ func main() {
 	fmt.Println("==================================================")
 	p := [4]float64{49.5, 34.2205859999999994566, 87, 12.165446}
 	for q, r := range p {
-		fmt.Printf("\nelement:%d,valu:%.2f", q, r)
+		fmt.Printf("\nelement:%d,valu:%.2f\n", q, r)
 	}
 	fmt.Println("==================================================")
 
 	arra := [5]float64{32, 0, 45465.564}
 	for _, tsi := range arra {
-		fmt.Println("\nvalue", tsi) //ignore the index=>use _
+		fmt.Println("\nvalue:", tsi) //ignore the index=>use _
 
 	}
 	fmt.Println("==================================================")
@@ -87,7 +87,9 @@ func main() {
 		{"sisi"},
 		{"rabna"},
 	}
-	fmt.Println(s, t)
+	fmt.Println(s)
+	fmt.Println(t)
+
 	fmt.Println("==================================================")
 
 }

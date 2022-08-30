@@ -35,7 +35,7 @@ func main() {
 	i := "welcome,to Microsoft"
 	j := "you should learn go or python"
 	fmt.Println(i, j)
-	res9 := strings.TrimSuffix(i, "to Microsoft")
+	res9 := strings.TrimSuffix(i, "in Microsoft")
 	res10 := strings.TrimSuffix(j, "or python")
 	fmt.Println(res9, res10)
 	k := "bad day,be happy"
