@@ -35,3 +35,11 @@ A benchmark is a type of function that executes a code segment multiple times an
 - To avoid executing any test functions in the test files, pass a regular expression to the `-run` flag = `go test -bench=. -count 5 -run=^#`
 -To include memory allocation statistics in the benchmark output, add the `-benchmem` flag = `go test -bench=. -count 5 -run=^# -benchmem`.  
 --  [A deep dive into benchmark test](https://blog.logrocket.com/benchmarking-golang-improve-function-performance/)  
+
+## Example Test
+this is really regular test. 
+- `func ExampleFuncName(...) {}`
+    - should start with `Example` .
+- you have to check output by comment: `//Output:`
+- the expected result test is below by comment 
+- `go test  -run ^ExampleFuncName$ ./addpack`
