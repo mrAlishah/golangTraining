@@ -21,8 +21,9 @@
 When writing tests, it is often important to know how much of your actual code the tests cover. This is generally referred to as coverage.
 
 - To run and consider covering unit test code use `-cover` : `go test ./... -cover` .
-- Go saved this coverage data in the file coverage.out .Now you can present the results in a web browser.
-    `go test ./PackageName -coverprofile=coverage.out`
+- Go saved this coverage data in the file coverage.out .Now you can present the results in a web browser or file.
+    `go test ./PackageName -coverprofile=coverage.out` </br>
+    `go tool ./PackageName -func=coverage.out` </br>
     `go tool cover -html=coverage.out`
 
 ## Benchmark Test
