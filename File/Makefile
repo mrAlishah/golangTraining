@@ -3,3 +3,6 @@
 
 02:
 	go run 02-ReadFile.go
+
+03:
+	go run 03-ioutilPKG.go
