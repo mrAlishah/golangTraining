@@ -6,3 +6,6 @@
 
 03:
 	go run 03-ioutilPKG.go
+
+04:
+	go run 04-ReadFileVariety.go
