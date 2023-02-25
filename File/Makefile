@@ -9,3 +9,6 @@
 
 04:
 	go run 04-ReadFileVariety.go
+
+05:
+	go run 05-embedPkg.go
