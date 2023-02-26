@@ -12,3 +12,6 @@
 
 05:
 	go run 05-embedPkg.go
+
+06:
+	go run 06-ReadWriteBinaryFile.go
