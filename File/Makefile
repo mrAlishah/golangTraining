@@ -15,3 +15,9 @@
 
 06:
 	go run 06-ReadWriteBinaryFile.go
+
+07:
+	go run 07-ReadFileCaseStudy.go
+
+08:
+	go run 08-WriteFileCaseStudy.go
