@@ -21,3 +21,6 @@
 
 08:
 	go run 08-WriteFileCaseStudy.go
+
+09:
+	go run 09-JSONFile.go
