@@ -6,7 +6,7 @@ Type assertion (as the name implies) is used to assert the type of a given varia
 ## What is type conversion?
 Type conversion is the process of changing a variable from one type to another specified type. For example, we can convert an int value to a float64.
 
-### Sample 07-assertion01.go 
+### Sample 02-assertion.go 
 A type assertion provides access to an interface value's underlying concrete value.
 ```go
 t := i.(T)
