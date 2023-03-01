@@ -13,7 +13,11 @@ An interface that has zero methods is called an empty interface. It is represent
 # type assertion
 
 Type assertion is used to extract the underlying value of the interface.
+### What is type assertion?
+Type assertion (as the name implies) is used to assert the type of a given variable. In Go, this is done by checking the underlying type of an empty interface variable.
 
+### What is type conversion?
+Type conversion is the process of changing a variable from one type to another specified type. For example, we can convert an int value to a float64.
 i.(T) is the syntax which is used to get the underlying value of interface i whose concrete type is T.
 # type switch
 A type switch is used to compare the concrete type of an interface against multiple types specified in various case statements.
