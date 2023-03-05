@@ -6,6 +6,7 @@ import (
 )
 
 /*
+Making Without Make
 you can also use reflection to make instances that normally require the make function.
 You can make a slice, map, or channel using the reflect.MakeSlice, reflect.MakeMap, and reflect.MakeChan functions.
 In all cases, you supply a reflect.Type and get back a reflect.Value that you can manipulate with reflection,
@@ -28,8 +29,8 @@ func main() {
 
 	// and here are the new values that we are making
 	// this is "reflect.Value" as defined
-	intSliceReflect := reflect.MakeSlice(sliceType, 0, 0)
-	mapReflect := reflect.MakeMap(mapType)
+	intSliceReflect := reflect.MakeSlice(sliceType, 0, 0) // argument needs reflect.Type
+	mapReflect := reflect.MakeMap(mapType)                // argument needs reflect.Type
 	fmt.Println("3-reflect.MakeSlice(sliceType, 0, 0): ", intSliceReflect)
 	fmt.Println("3-reflect.MakeMap(mapType): ", mapReflect)
 
