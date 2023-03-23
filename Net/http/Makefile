@@ -16,3 +16,7 @@
 	go run 08-httpMiddleware.go
 09:
 	go run 09-httpBasicAuth.go
+10:
+	go run 10-httpLogger.go
+11:
+	go run 11-httpLogger.go
