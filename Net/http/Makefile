@@ -10,3 +10,7 @@
 	go run 05-httpPassingVariablesToHandlers.go
 06:
 	go run 06-httpDefaultServeMux.go
+07:
+	go run 07-httpMiddlewareFlow.go
+08:
+	go run 08-httpMiddleware.go
