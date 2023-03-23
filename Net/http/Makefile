@@ -14,3 +14,5 @@
 	go run 07-httpMiddlewareFlow.go
 08:
 	go run 08-httpMiddleware.go
+09:
+	go run 09-httpBasicAuth.go
