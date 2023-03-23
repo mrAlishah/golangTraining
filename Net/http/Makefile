@@ -8,3 +8,5 @@
 	go run 04-httpHandlerFunc.go
 05:
 	go run 05-httpPassingVariablesToHandlers.go
+06:
+	go run 06-httpDefaultServeMux.go
