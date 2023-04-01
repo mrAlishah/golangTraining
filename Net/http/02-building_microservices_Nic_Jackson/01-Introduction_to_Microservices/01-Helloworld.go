@@ -16,6 +16,8 @@ func main() {
 	//The HandleFunc method creates a Handler
 	//type on the DefaultServeMux handler, mapping the path passed in the first parameter to the function in the second parameter:
 	//func HandleFunc(pattern string, handler func(ResponseWriter, *Request))
+	// The HandleFunc method creates a Handler type on the DefaultServeMux handler,
+	// mapping the path passed in the first parameter to the function in the second parameter.
 	http.HandleFunc("/helloworld", helloWorld01Handler)
 
 	log.Printf("Server starting on port %v\n", 8080)
@@ -25,6 +27,10 @@ func main() {
 	//func ListenAndServe(addr string, handler Handler) error
 	//The second parameter we are passing is nil, this is because we are using the DefaultServeMux handler,
 	//which we are setting up with our call to http.HandleFunc.
+	// Function: ListenAndServe takes two parameters, the TCP network address to bind the server to and the handler that will be used to route requests
+	// @Para1: port -- network address 8080 bind the server to all available IP addresses on port 8080.
+	// @Para2: nil  -- this is because we are using the DefaultServeMux handler, which we are setting up with our call to http.
+	// Since ListenAndServe blocks if the server starts correctly we will never exit on a successful start.
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 	//we are passing the output of ListenAndServe
 	//straight to log.Fatal(error), which is a convenience function equivalent to calling fmt.Print(a ...interface{}) followed
