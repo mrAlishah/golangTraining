@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func helloWorld01Handler(w http.ResponseWriter, r *http.Request) {
+func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, "Hello World\n")
 }
 
@@ -18,7 +18,7 @@ func main() {
 	//func HandleFunc(pattern string, handler func(ResponseWriter, *Request))
 	// The HandleFunc method creates a Handler type on the DefaultServeMux handler,
 	// mapping the path passed in the first parameter to the function in the second parameter.
-	http.HandleFunc("/helloworld", helloWorld01Handler)
+	http.HandleFunc("/helloworld", helloWorldHandler)
 
 	log.Printf("Server starting on port %v\n", 8080)
 

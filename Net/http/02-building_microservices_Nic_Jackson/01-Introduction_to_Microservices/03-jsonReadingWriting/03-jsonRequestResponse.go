@@ -8,15 +8,15 @@ import (
 	"net/http"
 )
 
-type helloWorld03Request struct {
+type helloWorldRequest struct {
 	Name string `json:"name"`
 }
 
-type helloWorld03Response struct {
+type helloWorldResponse struct {
 	Message string `json:"message"`
 }
 
-func helloWorld03UnmarshalHandler(w http.ResponseWriter, r *http.Request) {
+func helloWorldUnmarshalHandler(w http.ResponseWriter, r *http.Request) {
 
 	//The JSON that has been sent with the request is accessible in the Body field. Body implements the interface io.ReadCloser as a stream and does
 	//not return a []byte or a string. If we need the data contained in the body, we can simply read it into a byte array,
@@ -24,6 +24,8 @@ func helloWorld03UnmarshalHandler(w http.ResponseWriter, r *http.Request) {
 	//not automatically closed, however, when used in a ServeHTTP handler, the server automatically closes the request stream.
 
 	//---------Request
+	// Body request as a stream.
+	//  If we need the data contained in the body, we can simply read it into a byte array
 	// body, err := ioutil.ReadAll(r.Body)  Go.1.15 and earlier
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -31,18 +33,22 @@ func helloWorld03UnmarshalHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var request helloWorld03Request
+	// Convert json body request to local request.
+	var request helloWorldRequest
 	err = json.Unmarshal(body, &request)
 	if err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
-	log.Println(request.Name)
+	//log.Println(request.Name)
 
 	//---------Response
-	response := helloWorld03Response{Message: "Hello " + request.Name}
+	// Take info request from client, and response to client.
+	response := helloWorldResponse{Message: "Hello " + request.Name}
 
+	// Create object encoder
 	encoder := json.NewEncoder(w)
+	// Write JSON straight to an open writer
 	encoder.Encode(response)
 	/*Or
 	  data, err := json.Marshal(response)
@@ -54,34 +60,45 @@ func helloWorld03UnmarshalHandler(w http.ResponseWriter, r *http.Request) {
 	*/
 }
 
-func helloWorld03DecoderHandler(w http.ResponseWriter, r *http.Request) {
+func helloWorldDecoderHandler(w http.ResponseWriter, r *http.Request) {
 	//---------Request
-	var request helloWorld03Request
+	var request helloWorldRequest
+	// Like Marshall, we can use NewDecoder() func to create object for decoding.
+	// Create object decoder to decode Body request.
 	decoder := json.NewDecoder(r.Body)
 
+	//  Decode Body request and put to request.
 	err := decoder.Decode(&request)
 	if err != nil {
 		http.Error(w, "Bad request", http.StatusBadRequest)
 		return
 	}
-	log.Println(request.Name)
+	//log.Println(request.Name)
 
 	//---------Response
-	response := helloWorld03Response{Message: "Hello " + request.Name}
+	// After that, we can use it directly.
+	response := helloWorldResponse{Message: "Hello " + request.Name}
 
+	// Create object encoder.
 	encoder := json.NewEncoder(w)
+
+	// Write JSON directly to response.
 	encoder.Encode(response)
 }
 
 // curl localhost:8080/helloworld1 -d '{"name":"Alishah"}'
 // curl -X POST localhost:8080/helloworld1 -H "Content-Type: application/json" -d '{"name":"Alishah"}'
 func main() {
+	server()
+}
+
+func server() {
 	port := 8080
 
-	http.HandleFunc("/helloworld1", helloWorld03UnmarshalHandler)
+	http.HandleFunc("/helloworld1", helloWorldUnmarshalHandler)
 	//json.NewEncoder(w) is Faster than json.Marshal(response)
 	//json.NewDecoder(r.Body) is Faster than json.Unmarshal(body, &request)
-	http.HandleFunc("/helloworld2", helloWorld03DecoderHandler)
+	http.HandleFunc("/helloworld2", helloWorldDecoderHandler)
 
 	log.Printf("Server starting on port %v\n", 8080)
 
