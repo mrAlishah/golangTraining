@@ -16,6 +16,13 @@ type helloWorldResponse struct {
 	Message string `json:"message"`
 }
 
+/*************************************************************************************************/
+/* http.HandleFunc:
+/* 1) body, err := io.ReadAll(r.Body)
+/* 2) json.Unmarshal(body, &request)       //var request helloWorldRequest
+/* 3) data, err := json.Marshal(response)  //response := helloWorldResponse{Message: "Hello " + request.Name}
+/*************************************************************************************************/
+// This method is slower than json.Decoder/Encoder
 func helloWorldUnmarshalHandler(w http.ResponseWriter, r *http.Request) {
 
 	//The JSON that has been sent with the request is accessible in the Body field. Body implements the interface io.ReadCloser as a stream and does
@@ -60,6 +67,14 @@ func helloWorldUnmarshalHandler(w http.ResponseWriter, r *http.Request) {
 	*/
 }
 
+/*************************************************************************************************/
+/* http.HandleFunc:
+/* 1) decoder := json.NewDecoder(r.Body) // Reading
+/* 2) err := decoder.Decode(&request)    // var request helloWorldRequest
+/* 3) encoder := json.NewEncoder(w)      // Writing
+/* 4) encoder.Encode(response)           // response := helloWorldResponse{Message: "Hello " + request.Name}
+/*************************************************************************************************/
+// This method is fast
 func helloWorldDecoderHandler(w http.ResponseWriter, r *http.Request) {
 	//---------Request
 	var request helloWorldRequest
