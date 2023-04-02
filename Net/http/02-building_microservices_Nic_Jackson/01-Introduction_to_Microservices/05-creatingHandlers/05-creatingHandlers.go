@@ -15,6 +15,8 @@ type helloWorldRequest struct {
 	Name string `json:"name"`
 }
 
+// curl localhost:8080/helloworld -d '{"name":"Alishah"}'
+// curl -X POST localhost:8080/helloworld -H "Content-Type: application/json" -d '{"name":"Alishah"}'
 func main() {
 	port := 8080
 
