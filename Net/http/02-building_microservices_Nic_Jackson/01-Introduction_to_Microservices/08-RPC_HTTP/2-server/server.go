@@ -1,19 +1,15 @@
 package server
 
 import (
-	contract "01-Introduction_to_Microservices/07-RPC/1-contract"
+	contract "01-Introduction_to_Microservices/08-RPC_HTTP/1-contract"
 	"fmt"
 	"log"
 	"net"
+	"net/http"
 	"net/rpc"
 )
 
 const port = 1234
-
-func main() {
-	log.Printf("Server starting on port %v\n", port)
-	StartServer()
-}
 
 func StartServer() {
 	// As same as net/http package, we need to create a handler for RPC-base API
@@ -24,6 +20,11 @@ func StartServer() {
 	// http.Handle("/helloworld", &helloWorld)
 	/***** RPC-base API: *****/
 	rpc.Register(helloWorld)
+
+	/*#### NEW 1 ::: FOR RPC as a HTTP Transport protocol ####*/
+	//we are calling the rpc.HandleHTTP method, this is a requirement using HTTP with RPC
+	//as it will register the HTTP handlers we mentioned earlier with the DefaultServer method.
+	rpc.HandleHTTP()
 
 	// In net/http package, we use DefaultMuxServe using http protocol
 	/***** net/http package: *****/
@@ -36,28 +37,11 @@ func StartServer() {
 		log.Fatal(fmt.Sprintf("Unable to listen on given port: %s", err))
 	}
 
-	// Defer, after end process, it will close connection.
-	defer l.Close()
+	log.Printf("Server starting on port %v\n", port)
 
-	for {
-		// To receive connections,  we must call the Accept method on the listener by using Accetp().
-		//you will see that we have an endless for loop, this is because unlike ListenAndServe which blocks
-		//for all connections, with an RPC server we handle each connection individually and as soon as we
-		//deal with the first connection we need to continue to again call Accept to handle subsequent
-		//connections or the application would exit.
-
-		/*
-			with an RPC server we handle each connection individually and as soon as we
-			deal with the first connection we need to continue to again call Accept to handle subsequent connections or the application would exit. Accept is a
-			blocking method so if there are no clients currently attempting to connect to the service then Accept will block until one does. Once we receive a
-			connection then we need to call the Accept method again to process the next connection.
-		*/
-		conn, _ := l.Accept()
-
-		// The ServeConn method runs the DefaultServer method on the given connection, and will block until the client completes.
-		// because of this we use go
-		go rpc.ServeConn(conn)
-	}
+	/*#### NEW 2 ::: FOR RPC as a HTTP Transport protocol ####*/
+	log.Fatal(http.Serve(l, nil))
+	//http.Serve(l, nil)
 }
 
 /*************************************************************************************************/
@@ -76,9 +60,7 @@ type HelloWorldHandler struct{}
 
 // In RPC-base API, we can declare any request and response message at contract entity.
 /***** RPC-base API: *****/
-//func (h *HelloWorldHandler) HelloWorld(args *contract.HelloWorldRequest, reply *contract.HelloWorldResponse,) error {
-// req || args
-// res || reply
+//func (h *HelloWorldHandler) HelloWorld( reply *contract.HelloWorldResponse, args *contract.HelloWorldRequest) error {
 
 func (h *HelloWorldHandler) HelloWorld(req *contract.HelloWorldRequest, res *contract.HelloWorldResponse) error {
 	res.Message = "Hello " + req.Name

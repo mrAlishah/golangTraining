@@ -272,3 +272,6 @@ func (h helloWorldHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 ## RPC
 Look at 07-PRC sample. [here](./07-RPC)
+
+## RPC as HTTP Transport protocol
+Look at 08-PRC_HTTP sample. [here](./08-RPC_HTTP)

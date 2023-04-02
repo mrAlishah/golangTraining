@@ -48,8 +48,11 @@ type HelloWorldHandler struct{}
 
 // In RPC-base API, we can declare any request and response message at contract entity.
 /***** RPC-base API: *****/
+//func (h *HelloWorldHandler) HelloWorld(args *contract.HelloWorldRequest, reply *contract.HelloWorldResponse,) error {
+// req || args
+// res || reply
 
-func (h *HelloWorldHandler) HelloWorld(res *contract.HelloWorldResponse, req *contract.HelloWorldRequest) error {
+func (h *HelloWorldHandler) HelloWorld(req *contract.HelloWorldRequest, res *contract.HelloWorldResponse) error {
 res.Message = "Hello " + req.Name
 return nil
 }

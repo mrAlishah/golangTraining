@@ -1,7 +1,7 @@
 package client
 
 import (
-	contract "01-Introduction_to_Microservices/07-RPC/1-contract"
+	contract "01-Introduction_to_Microservices/08-RPC_HTTP/1-contract"
 	"fmt"
 	"log"
 	"net/rpc"
@@ -17,7 +17,8 @@ func CreateClient() *rpc.Client {
 		    If a field is present in the destination that is not in the source, then again the decoder
 		    will ignore this field and will successfully process the rest of the message.
 	*/
-	client, err := rpc.Dial("tcp", fmt.Sprintf("localhost:%v", port))
+	/*#### NEW ::: FOR RPC as a HTTP Transport protocol ####*/
+	client, err := rpc.DialHTTP("tcp", fmt.Sprintf("localhost:%v", port))
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
@@ -31,9 +32,6 @@ func PerformRequest(client *rpc.Client) contract.HelloWorldResponse {
 
 	// After connect to server successfully, when we use client.Call(), it can automatically run Dial() or something else
 	// Then we can make a request to the Server by inputting parameters into client.Call().
-	//Note:: pay attention to sort Param as Server.HelloWorld( req *contract.HelloWorldRequest, res *contract.HelloWorldResponse,)
-	// req || args
-	// res || reply
 	err := client.Call("HelloWorldHandler.HelloWorld", req, &res)
 	if err != nil {
 		log.Fatal("error:", err)
