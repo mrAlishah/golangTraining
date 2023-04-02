@@ -269,3 +269,6 @@ func (h helloWorldHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	encoder.Encode(response)
 }
 ```
+
+## RPC
+Look at 07-PRC sample. [here](./07-RPC)
