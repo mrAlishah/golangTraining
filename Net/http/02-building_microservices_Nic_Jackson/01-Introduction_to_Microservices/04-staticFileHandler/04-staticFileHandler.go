@@ -31,6 +31,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	encoder.Encode(response)
 }
 
+// http://localhost:8080/cat/cat.jpg
 func main() {
 	port := 8080
 
@@ -40,6 +41,7 @@ func main() {
 	// Use StripPrefix to remove the given prefix from the request URL's path and then invoking h handler
 	//In the preceding example, we are registering a StripPrefix handler with our path /cat/. If we did not do this, then the
 	//FileServer handler would be looking for our image in the images/cat directory.
+	// to execute : http://localhost:8080/cat/cat.jpg
 	http.Handle("/cat/", http.StripPrefix("/cat/", cathandler))
 
 	http.HandleFunc("/helloworld", helloWorldHandler)

@@ -20,18 +20,36 @@ func main() {
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", port), nil))
 }	
 ```
+Look at 01-basic_http_server sample. [here](./01-basic_http_server)
+## Routing
+Even a simple microservice will need the capability to route requests to different handlers dependent on the requested path or
+method.
+- In Go this is handled by the DefaultServeMux method which is an instance of ServerMux.
+- When we call the http.HandleFunc("/helloworld", helloWorldHandler) package function we are actually just indirectly calling http.DefaultServerMux.HandleFunc(…).
+
+There are two functions to adding handlers to a ServerMux handler:
+- Function handler
+> func HandlerFunc(pattern string, handler func(ResponseWriter, *Request))
+- Handler
+> func Handle(pattern string, handler Handler)
 
 ## 1) http.HandleFunc() 
+Look at 02-jsonWriting sample. [here](./02-jsonWriting)
+Look at 03-jsonReadingWriting sample. [here](./03-jsonReadingWriting)
 for Request & Response
 ### json.Marshal() & json.Unmarshal()
 ```go
 func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
-    //---------Request
+    //---------Request 
+    //Body request as a stream.
+    //If we need the data contained in the body, we can simply read it into a byte array	
     body, err := io.ReadAll(r.Body)
     if err != nil {
       http.Error(w, "Bad request", http.StatusBadRequest)
       return
     }
+    
+    // Convert json body request to local request.	
     var request helloWorldRequest
     err = json.Unmarshal(body, &request)
     if err != nil {
@@ -41,6 +59,7 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
     log.Println(request.Name)
 	
     //---------Response
+    // Take info request from client, and response to client.	
     response := helloWorldResponse{Message: "Hello " + request.Name}
     data, err := json.Marshal(response)
     if err != nil {
@@ -67,12 +86,15 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	
     //---------Response
     response := helloWorldResponse{Message: "Hello " + request.Name}
+    // Create object encoder   
     encoder := json.NewEncoder(w)
+    // Write JSON straight to an open writer	
     encoder.Encode(response)
 }
 ```
 ## 2) http.Handler
 every struct implement this interface can use `func Handle(pattern string, handler Handler)`
+Look at 05-creatingHandlers sample. [here](./05-creatingHandlers)
 ```go
 type Handler interface {
     ServeHTTP(ResponseWriter, *Request)
@@ -142,7 +164,7 @@ serve static files such as images or other content that is stored on the file sy
 //Example
 http.Handle("/images", http.FileServer(http.Dir("./images")))
 ```
-
+Look at 04-staticFileHandler sample. [here](./04-staticFileHandler)
 ### 4) NotFoundHandler
 ```go
 func NotFoundHandler() Handler
@@ -218,7 +240,7 @@ The WithValue method returns a copy of the parent Context in which the val value
 values are perfect to be used for request-scoped data.
 
 ### How to use context
-
+Look at 06-useContext sample. [here](./06-useContext)
 ```go
 type validationContextKey string //Look at sample 06
 
@@ -271,12 +293,32 @@ func (h helloWorldHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 ```
 
 ## RPC
+Remote Procedure Call(RPC) in Operating System is a powerful technique for constructing distributed, client-server based applications.  
+More details: [here](https://www.geeksforgeeks.org/remote-procedure-call-rpc-in-operating-system/)
+
+### Protocol
+Firstly, we need to know about architecture of protocol: [here](#https://www.digitalocean.com/community/tutorials/http-1-1-vs-http-2-what-s-the-difference)  
+And you know that the data will transfer to internet through 4 layer:
+* Application Layer (HTTP)
+* Transport Layer (TCP)
+* Network Layer (IP)
+* Data Link Layer
+  Until the current ponint, we don't know that what protocol does DefaultServeMux use?  
+  However, we know DefaultServeMux use HTTP protocol.
+
+When you use RPC standard:
+* you can select your protocol such as: tcp, tcp4, tcp6, unix, or unixpacket.
+* you also useing a given protocol and binding it to IP as same as DefaultServeMux
+
 Look at 07-PRC sample. [here](./07-RPC)
 
 ## RPC over HTTP Transport protocol
+As you know, 07-PRC is an example about communication between client and server without HTTP Protocol.
+Right now, how we can implement application using HTTP by RPC.
 In the instance that you need to use HTTP as your transport protocol then the rpc package can facilitate this by calling the HandleHTTP method.
 Look at 08-PRC_HTTP sample. [here](./08-RPC_HTTP)
 
 ## JSON-RPC over HTTP 
+Have you ever put a question that how we can communicate by JSON?
 we will look at the package that provides a built-in codec for serializing and deserializing to the JSON-RPC standard. We will also look at how we can send these responses over HTTP.
 Look at 09-PRC_HTTP_JSON sample. [here](./09-RPC_HTTP_JSON)
