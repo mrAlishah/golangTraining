@@ -273,5 +273,10 @@ func (h helloWorldHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 ## RPC
 Look at 07-PRC sample. [here](./07-RPC)
 
-## RPC as HTTP Transport protocol
+## RPC over HTTP Transport protocol
+In the instance that you need to use HTTP as your transport protocol then the rpc package can facilitate this by calling the HandleHTTP method.
 Look at 08-PRC_HTTP sample. [here](./08-RPC_HTTP)
+
+## JSON-RPC over HTTP 
+we will look at the package that provides a built-in codec for serializing and deserializing to the JSON-RPC standard. We will also look at how we can send these responses over HTTP.
+Look at 09-PRC_HTTP_JSON sample. [here](./09-RPC_HTTP_JSON)
