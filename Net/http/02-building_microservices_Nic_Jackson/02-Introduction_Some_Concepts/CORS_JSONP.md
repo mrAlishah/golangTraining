@@ -40,3 +40,13 @@ Response:
 ```
     hello({"message":"Hello World"})
 ```
+
+## CORS
+CORS is a W3C proposal to standardize cross-origin requests from the browser. It works by the browsers built in HTTP client
+making an OPTIONS request to a URI before the real request.
+If the server at the other end returns a header that contains the origin of the domain from which the script is being loaded, then
+the browser will trust the server and will allow a cross-site request to be made:
+```
+   Access-Control-Allow-Origin: origin.com
+```
+Implementing this in Go is quite straightforward and we could create a middleware to globally manage this for us.
