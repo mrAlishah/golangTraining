@@ -8,6 +8,7 @@ import (
 )
 
 // go test -bench=. ./03-jsonReadingWriting
+// $go test -v -run="none" -bench=. -benchtime="5s" -benchmem
 func BenchmarkHelloWorld1Handler(b *testing.B) {
 	b.ResetTimer()
 
