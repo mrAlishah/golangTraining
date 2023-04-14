@@ -147,7 +147,7 @@ Docker networking is an interesting topic, and by default, Docker supports the f
 ![03-Network.png](Img/03-Network.png)
 
 ### Bridge networking
-![05-Network bridg.png](Img/05-Network bridg.png) <br/>
+![05-Network bridg.png](Img/05-Network_bridg.png) <br/>
 The default network driver. If you don’t specify a driver, this is the type of network you are creating. Bridge networks are usually used when your applications run in standalone containers that need to communicate.<br/>
 For the containers on bridge network to communicate or be reachable from the outside world, port mapping needs to be configured.<br/>
 When the Docker engine starts, it creates the docker0 virtual interface on the host machine. The docker0 interface is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. When a container starts it creates a veth pair, it gives one to the container, which becomes its eth0, and the other connects to the docker0 bridge.
@@ -159,7 +159,7 @@ When the Docker engine starts, it creates the docker0 virtual interface on the h
 * Default subnet is 172.20.0.0
 
 ### Host networking
-![06-Network Host.png](Img/06-Network Host.png) <br/>
+![06-Network_Host.png](Img%2F06-Network_Host.png) <br/>
 For standalone containers, remove network isolation between the container and the Docker host, and use the host’s networking directly.<br/>
 The host network is essentially the same network that the Docker engine is running on. When you connect a container to the host network all of the ports that are exposed by the container are automatically mapped to the hosts, it also shares the IP address of the host.<br/>
 The host network can also pose a security risk to your container as it is no longer protected by the principle of no trust and you no longer have the ability to explicitly control if a port is exposed or not.<br/>
@@ -175,7 +175,7 @@ Removing your container from any network might in some instances be something yo
 * In simple terms, None is called a loopback interface, which means it has no external network interfaces 
 
 ### Overlay network
-![07-Network Overlay.png](Img/07-Network Overlay.png) <br/>
+![07-Network Overlay.png](Img/07-Network_Overlay.png) <br/>
 Overlay networks connect multiple Docker daemons together and enable swarm services to communicate with each other. You can also use overlay networks to facilitate communication between a swarm service and a standalone container, or between two standalone containers on different Docker daemons. This strategy removes the need to do OS-level routing between these containers. <br/>
 An overlay network uses software virtualization to create additional layers of network abstraction running on top of a physical network. In Docker, an overlay network driver is used for multi-host network communication. This driver utilizes Virtual Extensible LAN (VXLAN) technology which provide portability between cloud, on-premise and virtual environments. VXLAN solves common portability limitations by extending layer 2 subnets across layer 3 network boundaries, hence containers can run on foreign IP subnets.<br/>
 The Docker overlay network is a unique Docker network that is used to connect containers running on separate hosts to one another.The Docker overlay network solves this problem, it is in effect a network tunnel between machines which passes the traffic unmodified over the physical network.<br/>
@@ -184,7 +184,7 @@ The Docker overlay network is a unique Docker network that is used to connect co
 * It is an important network driver in Docker networking. It helps in providing the interaction between the stand-alone container and the Docker swarm service
 
 ### macvlan network
-![08-Network MacvLan.png](Img%2F08-Network%20MacvLan.png) <br/>
+![08-Network_MacvLan.png](Img%2F08-Network_MacvLan.png) <br/>
 Macvlan networks allow you to assign a MAC address to a container, making it appear as a physical device on your network. The Docker daemon routes traffic to containers by their MAC addresses. Using the macvlan driver is sometimes the best choice when dealing with legacy applications that expect to be directly connected to the physical network, rather than routed through the Docker host’s network stack.<br/>
 The macvlan driver is used to connect Docker containers directly to the host network interfaces through layer 2 segmentation. No use of port mapping or network address translation (NAT) is needed and containers can be assigned a public IP address which is accessible from the outside world. Latency in macvlan networks is low since packets are routed directly from Docker host network interface controller (NIC) to the containers.<br/>
 Note that macvlan has to be configured per host, and has support for physical NIC, sub-interface, network bonded interfaces and even teamed interfaces. Traffic is explicitly filtered by the host kernel modules for isolation and security. <br/>
