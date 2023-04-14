@@ -10,7 +10,7 @@
 - They’re isolated from each other and can run different versions of the same software without affecting each other.
 - They’re extremely lightweight, so they can start up faster and use fewer resources.
 
-![01.jpg](./Img/01.jpg)
+![01.jpg](Img/01.jpg)<br/>
 
 ## Docker Components and Tools
 Docker consists of three major components:
@@ -32,7 +32,7 @@ n addition to these core components, there’s also a number of other tools that
 
 ## Docker Containers
 
-![Docker Containerized vs Virtualization](Img/02-Docker-containerized-vd-vm-transparent.jpg)
+![Docker Containerized vs Virtualization](Img/02-Docker-containerized-vd-vm-transparent.jpg)<br/>
 
 - Containers are often compared to virtual machines, but there are some important differences between the two. Virtual machines run a full copy of an operating system, whereas containers share the host kernel with other containers. This makes containers much more lightweight and efficient than virtual machines.
 - A container image is a lightweight, stand-alone, executable package of a piece of software that includes everything needed to run it: code, runtime, system tools, system libraries, settings.
@@ -136,10 +136,98 @@ The `-w` flag we are passing is to set the working directory that means that any
 We are also using a slightly different image this time. We are not using alpine:latest, which is a lightweight version of Linux, we are using golang:alpine, which is a version of Alpine with the most recent Go tools installed.
 
 ## Docker networking
+![04-Network.png](Img/04-Network.png)<br/>
 Docker networking is an interesting topic, and by default, Docker supports the following network modes:
 * bridge
 * host
 * none
 * overlay
+* macvlan
+
+![03-Network.png](Img/03-Network.png)
 
 ### Bridge networking
+![05-Network bridg.png](Img/05-Network bridg.png) <br/>
+The default network driver. If you don’t specify a driver, this is the type of network you are creating. Bridge networks are usually used when your applications run in standalone containers that need to communicate.<br/>
+For the containers on bridge network to communicate or be reachable from the outside world, port mapping needs to be configured.<br/>
+When the Docker engine starts, it creates the docker0 virtual interface on the host machine. The docker0 interface is a virtual Ethernet bridge that automatically forwards packets between any other network interfaces that are attached to it. When a container starts it creates a veth pair, it gives one to the container, which becomes its eth0, and the other connects to the docker0 bridge.
+
+* It is a private default network created on the host
+* Containers linked to this network have an internal IP address through which they communicate with each other easily
+* The Docker server (daemon) creates a virtual ethernet bridge docker0 that operates automatically, by delivering packets among various network interfaces
+* These are widely used when applications are executed in a standalone container 
+* Default subnet is 172.20.0.0
+
+### Host networking
+![06-Network Host.png](Img/06-Network Host.png) <br/>
+For standalone containers, remove network isolation between the container and the Docker host, and use the host’s networking directly.<br/>
+The host network is essentially the same network that the Docker engine is running on. When you connect a container to the host network all of the ports that are exposed by the container are automatically mapped to the hosts, it also shares the IP address of the host.<br/>
+The host network can also pose a security risk to your container as it is no longer protected by the principle of no trust and you no longer have the ability to explicitly control if a port is exposed or not.<br/>
+* It is a public network
+* It utilizes the host’s IP address and TCP port space to display the services running inside the container
+* It effectively disables network isolation between the docker host and the docker containers, which means using this network driver a user will be unable to run multiple containers on the same host
+
+### None network
+For this container, disable all networking. Usually used in conjunction with a custom network driver. none is not available for swarm services.<br/>
+Removing your container from any network might in some instances be something you wish to do. Consider the situation where you have an application that only processes data stored in a file.<br/>
+* In this network driver, the Docker containers will neither have any access to external networks nor will it be able to communicate with other containers
+* This option is used when a user wants to disable the networking access to a container
+* In simple terms, None is called a loopback interface, which means it has no external network interfaces 
+
+### Overlay network
+![07-Network Overlay.png](Img/07-Network Overlay.png) <br/>
+Overlay networks connect multiple Docker daemons together and enable swarm services to communicate with each other. You can also use overlay networks to facilitate communication between a swarm service and a standalone container, or between two standalone containers on different Docker daemons. This strategy removes the need to do OS-level routing between these containers. <br/>
+An overlay network uses software virtualization to create additional layers of network abstraction running on top of a physical network. In Docker, an overlay network driver is used for multi-host network communication. This driver utilizes Virtual Extensible LAN (VXLAN) technology which provide portability between cloud, on-premise and virtual environments. VXLAN solves common portability limitations by extending layer 2 subnets across layer 3 network boundaries, hence containers can run on foreign IP subnets.<br/>
+The Docker overlay network is a unique Docker network that is used to connect containers running on separate hosts to one another.The Docker overlay network solves this problem, it is in effect a network tunnel between machines which passes the traffic unmodified over the physical network.<br/>
+* This is utilized for creating an internal private network to the Docker nodes in the Docker swarm cluster
+* Note: Docker Swarm is a service for containers which facilitates developer teams to build and manage a cluster of swarm nodes within the Docker platform
+* It is an important network driver in Docker networking. It helps in providing the interaction between the stand-alone container and the Docker swarm service
+
+### macvlan network
+![08-Network MacvLan.png](Img%2F08-Network%20MacvLan.png) <br/>
+Macvlan networks allow you to assign a MAC address to a container, making it appear as a physical device on your network. The Docker daemon routes traffic to containers by their MAC addresses. Using the macvlan driver is sometimes the best choice when dealing with legacy applications that expect to be directly connected to the physical network, rather than routed through the Docker host’s network stack.<br/>
+The macvlan driver is used to connect Docker containers directly to the host network interfaces through layer 2 segmentation. No use of port mapping or network address translation (NAT) is needed and containers can be assigned a public IP address which is accessible from the outside world. Latency in macvlan networks is low since packets are routed directly from Docker host network interface controller (NIC) to the containers.<br/>
+Note that macvlan has to be configured per host, and has support for physical NIC, sub-interface, network bonded interfaces and even teamed interfaces. Traffic is explicitly filtered by the host kernel modules for isolation and security. <br/>
+* It simplifies the communication process between containers
+* This network assigns a MAC address to the Docker container. With this Mac address, the Docker server (daemon) routes the network traffic to a router
+* Note: Docker Daemon is a server which interacts with the operating system and performs all kind of services
+* It is suitable when a user wants to directly connect the container to the physical network rather than the Docker host
+
+### ipvlan network
+IPvlan networks give users total control over both IPv4 and IPv6 addressing. The VLAN driver builds on top of that in giving operators complete control of layer 2 VLAN tagging and even IPvlan L3 routing for users interested in underlay network integration.<br/>
+
+### Custom network drivers
+You can install and use third-party network plugins with Docker. These plugins are available from Docker Hub or from third-party vendors. See the vendor’s documentation for installing and using a given network plugin.<br/>
+Docker also supports plugins for networking, based around its open source libnetwork project, you can write custom networking plugins that can replace the networking subsystem of the Docker engine. They also give the capability for you to connect non-Docker applications to your container network such as a physical database server.<br/>
+Likes:
+* Weaveworks : https://www.weave.works/
+* Project Calico : https://www.tigera.io/project-calico/
+
+## `docker network ls`
+To see the currently running networks on your Docker engine, we can execute the following command:
+```dockerfile
+docker network ls
+```
+## Creating a bridge network
+```dockerfile
+docker network create testnetwork
+```
+
+## Connecting containers to a custom network
+after Create your network, Execute :
+```dockerfile
+docker run -it --rm -v $(pwd):/src -w /src --name server --network=testnetwork golang:alpine go run main.go
+```
+`--network=testnetwork` To connect a container to a custom network.
+
+for running client request CURL, execute this code on your custom network:
+```dockerfile
+docker run --rm --network=testnetwork appropriate/curl:latest curl -i -XPOST server:8080/helloworld -d '{"name":"World"}'
+```
+
+at first time ,Downloaded curl and then again execute it.
+
+## Delete network
+```dockerfile
+docker network rm testnetwork
+```
