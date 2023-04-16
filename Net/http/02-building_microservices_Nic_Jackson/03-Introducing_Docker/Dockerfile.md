@@ -102,3 +102,58 @@ $ docker run --rm -p 8080:8080 testserver
 $ curl -XPOST localhost:8080/helloworld -d '{"name":"world"}'
 ```
 
+## Docker Ignore files
+The `.dockerignore` file is similar to a git ignore file before the CLI sends the context to the Engine, it excludes files and directories that match patterns in the `.dockerignore` file.<br/>
+It uses the patterns which are defined in Go's filepath.Match rules you can find more information about them in the following Go documentation:
+https://pkg.go.dev/path/filepath#Match
+```
+# comment = Ignored.
+
+*/temp* = Exclude files and directories whose names start with temp in any immediate subdirectory of the root. 
+For example, the plain file /somedir/temporary.txt is excluded, as is the directory /somedir/temp.
+
+*/*/temp* = Exclude files and directories starting with temp from any subdirectory that is two levels below the root. 
+For example, /somedir/subdir/temporary.txt is excluded.
+
+temp? = Exclude files and directories in the root directory whose names are a one-character extension of temp.
+For example, /tempa and /tempb are excluded.
+```
+https://docs.docker.com/engine/reference/builder/#/dockerignore-file
+
+## Docker Compose
+
+### version
+It defines the version of the Docker compose.
+
+### services
+we define the services. Services are the containers that you would like to start with your stack. Each service has to have a unique name to the compose file, but not necessarily to all the containers running on your Docker Engine. To avoid conflicts when starting a stack, we can pass -p projectname to the docker-compose up command; this will prefix the name of any of our containers with the specified project name.
+
+## run docker compose 
+```dockerfile
+docker-compose up
+
+OR
+
+docker-compose -f ./docker-compose.yml up
+```
+we can pass the -f argument to compose with a path to the compose file we would like to load.<br/>
+
+To remove any stopped container that you have started with docker-compose, we can use the particular compose command rm and pass the -v argument to remove any associated.
+```dockerfile
+docker-compose rm -v
+```
+or
+```dockerfile
+docker-compose down
+```
+
+## Specifying a project name
+As we discussed earlier when we start docker-compose, it will create services with the given names in your Compose file appending the project name default to them. If we need to run multiple instances of this compose file, then docker-compose will not start another instance as it will check to see if any services are running with the given names first. To override this, we can specify the project name replacing the default name of default. To do this we just need to specify the -p projectname argument to our command as follows:
+```dockerfile
+docker-compose -p testproject up
+```
+This will then create two containers:
+```
+testproject_testserver
+testproject_curl
+```
