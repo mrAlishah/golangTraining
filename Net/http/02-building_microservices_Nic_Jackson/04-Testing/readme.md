@@ -9,5 +9,5 @@ OK, so I am trying to be funny, but the concept is correct:
 * Starting out with a mantra of quality first can alleviate many of these problems.
 
 ## The testing pyramid
-<img src="Img%2F01-Testing.png" width="300">
-<img src="Img%2F02-Testing.jpg" width="300"><br/>
+<img src="Img%2F01-Testing.png" width="600">
+<img src="Img%2F02-Testing.jpg" width="600"><br/>
