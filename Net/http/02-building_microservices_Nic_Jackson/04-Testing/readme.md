@@ -10,7 +10,8 @@ OK, so I am trying to be funny, but the concept is correct:
 
 ## The testing pyramid
 <img src="Img%2F01-Testing.png" width="600">
-<img src="Img%2F02-Testing.jpg" width="600"><br/>
+<img src="Img%2F02-Testing.jpg" width="600">
+<img src="Img%2F09-Integerety.png" width="600"><br/>
 
 * Unit test: Implement to detect error on your design. your cheapest (fastest) tests to run, which will be your unit tests, go at the bottom of the pyramid;
 * Service: where you define a flow service in your application.
@@ -38,7 +39,6 @@ Then I should receive a bad request message
 <img src="Img%2F03-Testing.jpg" width="600">
 <img src="Img%2F05-BDD.png" width="600">
 <img src="Img%2F06-BDD-TDD.png" width="600">
-<img src="Img%2F09-Integerety.png" width="600">
 <img src="Img%2F07-Behaviour-Driven Development - Cucumber.png" width="600">
 <img src="Img%2F08-BDD.jpeg" width="600">
 <img src="Img%2F09-BDD.jpeg" width="600"> 
