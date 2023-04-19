@@ -27,9 +27,34 @@ In the early days of automated testing, all the testing was completed at the top
 When writing tests, I like to follow a process called outside-in development.<br/>
 With outside-in development, you start by writing your tests almost at the top of the pyramid, determine what the functionality is going to be for the story you are working on, and then write some failing test for this story.<br/>
 Then you work on implementing the unit tests and code which starts to get the various steps in the behavioral tests (BDD) to pass.<br/>
+>Feature: As a user when I call the search endpoint, I would like to receive a list of kittens
+
+The feature is the story which, in an agile environment is owned by the product owner. The feature is then broken down into scenarios which explain in greater detail the qualities that the code must have to be acceptable.
+> Scenario: Invalid query
+Given I have no search criteria
+When I call the search endpoint
+Then I should receive a bad request message
+
 <img src="Img%2F03-Testing.jpg" width="600">
 <img src="Img%2F05-BDD.png" width="600">
 <img src="Img%2F06-BDD-TDD.png" width="600">
+<img src="Img%2F09-Integerety.png" width="600">
 <img src="Img%2F07-Behaviour-Driven Development - Cucumber.png" width="600">
 <img src="Img%2F08-BDD.jpeg" width="600">
-<img src="Img%2F09-BDD.jpeg" width="600">
+<img src="Img%2F09-BDD.jpeg" width="600"> 
+
+### Unit-test
+Our unit tests go right down to the bottom of the pyramid.
+
+#### Law
+* **First law:** You may not write production code until you have written a failing unit test
+* **Second law:**  You may not write more of a unit test than is sufficient to fail, and not compiling is failing
+* **Third law:**  You may not write more production code than is sufficient to pass the currently failing test
+
+**Note:**
+- Production code: Production means anything that you need to work reliably, and consistently.  
+  Refer: [here](https://stackoverflow.com/questions/490289/what-exactly-defines-production) <br/>
+
+  <img src="Img%2F10-AAA.jpeg" width="600">
+  <img src="Img%2F11-AAA.jpeg" width="600">
+
