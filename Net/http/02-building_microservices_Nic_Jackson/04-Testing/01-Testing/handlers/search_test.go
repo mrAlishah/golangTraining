@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+// validate that search criteria
+// go test -v -race ./...
 func TestSearchHandlerReturnsBadRequestWhenNoSearchCriteriaIsSent(t *testing.T) {
 	handler := Search{}
 	request := httptest.NewRequest("GET", "/search", nil)

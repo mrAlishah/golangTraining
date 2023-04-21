@@ -58,3 +58,43 @@ Our unit tests go right down to the bottom of the pyramid.
   <img src="Img%2F10-AAA.jpeg" width="600">
   <img src="Img%2F11-AAA.jpeg" width="600">
 
+**Mock**
+idiomatically: Mock tests are exams that are prepared on guidelines same as real exams. These follow the same pattern, set of questions, difficulty level, and also time limits. And just because these mimic the real exam, these are called “Mock” tests!<br/><br/> 
+Developing Mock testing: Mock Testing provides you the ability to isolate and test your code without any interference of the dependencies and other variables like network issues and traffic fluctuations. In simple words, in mock testing, we replace the dependent objects with mock objects.<br/>
+* **stub** is replacement for some dependency in your code that will be used during test execution. It is typically built for one particular test and unlikely can be reused for another because it has hardcoded expectations and assumptions.
+* **mock** takes stubs to next level. It adds means for configuration, so you can set up different expectations for different tests. That makes mocks more complicated, but reusable for different tests.
+What's the difference between stub and mock in Go unit testing? [here](https://stackoverflow.com/questions/53360256/whats-the-difference-between-stub-and-mock-in-go-unit-testing)
+
+### httptest.NewRequest
+`http.Request` that can be created using `httptest.NewRequest` exported function.NewRequest returns a new incoming server Request, suitable for passing to an http.Handler for testing.
+```go
+func NewRequest(method, target string, body io.Reader) *http.Request
+```
+We can pass parameters to the `method` and the `target`, which is either the path or an absolute URL.<br/>
+Finally, we can give it an io.Reader file which will correspond to the body of the request; if we do not pass a nil value then Request.ContentLength is set.
+
+### httptest.NewRecorder
+`http.ResponseWriter` that can be created by using `httptest.NewRecorder` type which returns a `httptest.ResponseRecorder`.ResponseRecorder is an implementation of `http.ResponseWriter` that records its mutations for later inspection in tests.<br/>
+The httptest.ResponseRecorder is an implementation of http.ResponseWriter and can be used to be passed into our server handler, record all the data that the handler will write to the response and return the data written afterwards.<br/>
+Refer to Example: (httptest)[https://speedscale.com/blog/testing-golang-with-httptest/]
+```go
+response := httptest.NewRecorder()
+```
+**httptest.ResponseRecorder:**
+```go
+type ResponseRecorder struct {
+    Code int // the HTTP response code from WriteHeader
+    HeaderMap http.Header // the HTTP response headers
+    Body *bytes.Buffer // if non-nil, the bytes.Buffer to append written data to
+    Flushed bool
+    // contains filtered or unexported fields
+}
+```
+
+### Run Unit Test
+```go
+ go test -v -race ./...
+```
+* The `-v` flag will print the output in a verbose style, and it will also print all the text written to the output by the application, even if the test succeeds.
+* The `-race` flag enables Go's race detector which holds discover bugs with concurrency problems. A data race occurs when two Go routines access the same variable concurrently, and at least one of the accesses is a write. The race flag adds a small overhead to your test run, so I recommend you add it to all executions.
+* Using `./...` as our final parameter allows us to run all our tests in the current folder as well as the child folders, it saves us from manually having to construct a list of packages or files to test.
