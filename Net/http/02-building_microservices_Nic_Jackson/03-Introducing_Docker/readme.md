@@ -1,6 +1,21 @@
 #Docker
-
+* `docker`, for managing containers on your system
+* `docker build`, for creating a new image from a `Dockerfile`
+* `docker images`, for listing all available images on your system
+* `docker run`, for launching a new container from an image
+* `docker ps`, for listing all running containers on your system
+* `docker stop`, for gracefully stopping a running container
+* `docker rm`, for removing a stopped container from your system
+* `docker rmi`, for removing an image from your system
+* `docker login`, for logging in to a Docker registry
+* `docker push`, for pushing an image to a Docker registry
+* `docker pull`, for pulling an image from a Docker registry
+* `docker exec`, for executing a command in a running container
+* `docker export`, for exporting a container as a tar archive
+* `docker import`, for importing a tar archive as an image
+* 
 ## What is docker?
+[details](https://www.sitepoint.com/what-is-docker/)
 >Docker is the silver bullet that solved the problem with software containers and virtualization once and for all. Yes, that’s a strong claim! Other products had attempted to deal with these problems, but Docker’s fresh approach and ecosystem has wiped the competition off the map. This guide will help you understand the basic concepts of Docker.
 
 - Docker is a technology that allows you to build, run, test, and deploy distributed applications. It uses operating-system-level virtualization to deliver software in packages called containers.
