@@ -72,11 +72,14 @@ func NewRequest(method, target string, body io.Reader) *http.Request
 ```
 We can pass parameters to the `method` and the `target`, which is either the path or an absolute URL.<br/>
 Finally, we can give it an io.Reader file which will correspond to the body of the request; if we do not pass a nil value then Request.ContentLength is set.
-
+```go
+	body, _ := json.Marshal(data)
+	req := httptest.NewRequest("POST", "/search", bytes.NewReader(body))
+```
 ### httptest.NewRecorder
 `http.ResponseWriter` that can be created by using `httptest.NewRecorder` type which returns a `httptest.ResponseRecorder`.ResponseRecorder is an implementation of `http.ResponseWriter` that records its mutations for later inspection in tests.<br/>
 The httptest.ResponseRecorder is an implementation of http.ResponseWriter and can be used to be passed into our server handler, record all the data that the handler will write to the response and return the data written afterwards.<br/>
-Refer to Example: (httptest)[https://speedscale.com/blog/testing-golang-with-httptest/]
+Refer to Example: [httptest](https://speedscale.com/blog/testing-golang-with-httptest/)
 ```go
 response := httptest.NewRecorder()
 ```

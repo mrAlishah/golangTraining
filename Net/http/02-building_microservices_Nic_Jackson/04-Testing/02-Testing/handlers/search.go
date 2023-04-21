@@ -23,7 +23,7 @@ func (s *Search) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	/***** PASS Test *****/
 	err := decoder.Decode(request)
-	if err != nil {
+	if err != nil || len(request.Query) < 1 {
 		http.Error(rw, "Bad Request", http.StatusBadRequest)
 		return
 	}
