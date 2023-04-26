@@ -3,7 +3,6 @@ package handlers
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -41,7 +40,7 @@ func TestSearchHandlerReturnsBadRequestWhenBlankSearchCriteriaIsSent(t *testing.
 	}
 }
 
-func TestSearchHandlerCallsDataStoreWithValidQuery(t *testing.T) {
+func TestSearchHandlerReturnsKittensWithValidQuery(t *testing.T) {
 	//Arrange = Setup
 	name := "Garfield"
 
@@ -55,15 +54,20 @@ func TestSearchHandlerCallsDataStoreWithValidQuery(t *testing.T) {
 	err := decoder.Decode(response)
 
 	//Assert
-	if rw.Code == http.StatusBadRequest {
-		t.Errorf("Expected Request Ok but got %v", rw.Code)
-	}
-
 	if err != nil {
 		t.Errorf("Expected unMarshall response but got %v", err)
 	}
 
-	assert.Equal(t, 1, len(response.Kittens))
+	if rw.Code == http.StatusBadRequest {
+		t.Errorf("Expected Request Ok but got %v", rw.Code)
+	}
+
+	// we have real in-memory result
+	t.Logf("response search result is %d => %v", len(response.Kittens), response.Kittens)
+	if len(response.Kittens) == 0 {
+		t.Errorf("Expected resualt>0 but response result = %d", len(response.Kittens))
+	}
+
 }
 
 // Arrange = Setup
