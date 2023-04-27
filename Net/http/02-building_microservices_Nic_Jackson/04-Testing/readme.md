@@ -51,9 +51,29 @@ Our unit tests go right down to the bottom of the pyramid.
 * **Second law:**  You may not write more of a unit test than is sufficient to fail, and not compiling is failing
 * **Third law:**  You may not write more production code than is sufficient to pass the currently failing test
 
-**Note:**
-- Production code: Production means anything that you need to work reliably, and consistently.  
-  Refer: [here](https://stackoverflow.com/questions/490289/what-exactly-defines-production) <br/>
+### Note
+One of the most effective ways to test a microservice in Go is not to fall into the trap of trying to execute all the tests through the HTTP interface.  
+**Follow steps:**
+1. **Step 1:** Create a pattern for test program  
+   - We need develop **a pattern that avoids** creating a physical web server for testing our handlers, the code to create this kind of test is slow to run and incredibly tedious to write.
+2. **Step 2:** Implement Unit test
+   - What need to be doing is to test our handlers and the code within them as **Unit test**.
+   - These tests will run far quicker than testing through the web server.
+3. **Step 3:** Get coverage.
+   - And if we think about coverage, we will be able to test the writing of the handlers in the **Cucumber** tests that execute a request to the running server which overall gives us 100% coverage of our code.
+
+Production code: Production means anything that you need to work reliably, and consistently.  
+Refer: [here](https://stackoverflow.com/questions/490289/what-exactly-defines-production) <br/>
+
+### Naming for test case
+The name of the test must have a particular name beginning with Test and then immediately following this an uppercase
+character or number.  
+For a example:
+- Do not: TestmyHandler
+- Should: Test1Handler
+- Should: TestMyHandler
+- Recommend: Test1MyHandler
+- Recommend: TestSearchHandlerReturnsBadRequestWhenNoSearchCriteriaIsSent
 
   <img src="Img%2F10-AAA.jpeg" width="600">
   <img src="Img%2F11-AAA.jpeg" width="600">
@@ -101,3 +121,8 @@ type ResponseRecorder struct {
 * The `-v` flag will print the output in a verbose style, and it will also print all the text written to the output by the application, even if the test succeeds.
 * The `-race` flag enables Go's race detector which holds discover bugs with concurrency problems. A data race occurs when two Go routines access the same variable concurrently, and at least one of the accesses is a write. The race flag adds a small overhead to your test run, so I recommend you add it to all executions.
 * Using `./...` as our final parameter allows us to run all our tests in the current folder as well as the child folders, it saves us from manually having to construct a list of packages or files to test.
+
+## Behavirol Driven Development
+### What is BDD?
+* Behavioral Driven Development (BDD) and is a technique often executed by an application framework called Cucumber.
+* It was developed by Dan North and was designed to create a common ground between developers and product owners.
