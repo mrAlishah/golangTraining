@@ -126,3 +126,19 @@ type ResponseRecorder struct {
 ### What is BDD?
 * Behavioral Driven Development (BDD) and is a technique often executed by an application framework called Cucumber.
 * It was developed by Dan North and was designed to create a common ground between developers and product owners.
+
+we discuss the facets of the feature and what the essential qualities of it are and start to write scenarios.
+```
+Sad path
+    Scenario: User passes no search criteria
+        Given I have no search criteria
+        When I call the search endpoint
+        Then I should receive a bad request message
+        
+Happy path
+    Scenario: User passes valid search criteria
+        Given I have valid search criteria
+        When I call the search endpoint
+        Then I should receive a list of kittens
+```
+From an automation perspective what we then do is to write the steps which correspond to each of these `Given, When, and Then` statements.
