@@ -2,6 +2,7 @@ package features
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -19,15 +20,33 @@ var criteria interface{}
 var response *http.Response
 var err error
 
-func TestMain(m *testing.M) {
+//func TestMain(m *testing.M) {
+//
+//	status := godog.TestSuite{
+//		Name:                 "06-TestingBDD",
+//		TestSuiteInitializer: InitializeTestSuite,
+//		ScenarioInitializer:  InitializeScenario,
+//	}.Run()
+//
+//	os.Exit(status)
+//}
 
-	status := godog.TestSuite{
-		Name:                 "06-TestingBDD",
-		TestSuiteInitializer: InitializeTestSuite,
-		ScenarioInitializer:  InitializeScenario,
-	}.Run()
+func TestFeatures(t *testing.T) {
 
-	os.Exit(status)
+	suite := godog.TestSuite{
+		//Name:                 "06-TestingBDD",
+		//TestSuiteInitializer: InitializeTestSuite,
+		ScenarioInitializer: InitializeScenario,
+		//Options: &godog.Options{
+		//	Format:   "pretty",
+		//	Paths:    []string{"features"},
+		//	TestingT: t, // Testing instance that will run subtests.
+		//},
+	}
+
+	if suite.Run() != 0 {
+		t.Fatal("non-zero status returned, failed to run feature tests")
+	}
 }
 
 func iHaveNoSearchCriteria() error {
@@ -108,16 +127,24 @@ func InitializeTestSuite(ctx *godog.TestSuiteContext) {
 }
 
 func InitializeScenario(ctx *godog.ScenarioContext) {
-	ctx.BeforeScenario(func(*godog.Scenario) {
+	// deprecated
+	//ctx.BeforeScenario(func(*godog.Scenario) {
+	//	clearDB()
+	//	setupData()
+	//	startServer()
+	//})
+	/* New version */
+	ctx.Before(func(ctx context.Context, sc *godog.Scenario) (context.Context, error) {
 		clearDB()
 		setupData()
 		startServer()
+		return ctx, nil
 	})
 
-	ctx.Step(`^I have no search criteria$`, iHaveNoSearchCriteria)
 	ctx.Step(`^I call the search endpoint$`, iCallTheSearchEndpoint)
-	ctx.Step(`^I should receive a bad request message$`, iShouldReceiveABadRequestMessage)
 	ctx.Step(`^I have a valid search criteria$`, iHaveAValidSearchCriteria)
+	ctx.Step(`^I have no search criteria$`, iHaveNoSearchCriteria)
+	ctx.Step(`^I should receive a bad request message$`, iShouldReceiveABadRequestMessage)
 	ctx.Step(`^I should receive a list of kittens$`, iShouldReceiveAListOfKittens)
 
 	// ctx.AfterScenario(func(interface{}, error) {
@@ -141,22 +168,27 @@ func startServer() {
 	fmt.Printf("Server running with pid: %v", server.Process.Pid)
 }
 
+// because we cannot control when our Mongo instance is going to be ready to accept connections,
+// we need to wait for it before kicking off the tests
 func waitForDB() {
-	var err error
+	//var err error
 
-	serverURI := "localhost"
+	//serverURI := "localhost"
+	serverURI := "mongodb://localhost"
 	if os.Getenv("DOCKER_IP") != "" {
 		serverURI = os.Getenv("DOCKER_IP")
 	}
 
-	for i := 0; i < 10; i++ {
-		store, err = data.NewMongoStore(serverURI)
-		if err == nil {
-			break
-		}
+	store, _ = data.NewMongoStore(serverURI)
 
-		time.Sleep(1 * time.Second)
-	}
+	//for i := 0; i < 10; i++ {
+	//	store, err = data.NewMongoStore(serverURI)
+	//	if err == nil {
+	//		break
+	//	}
+	//
+	//	time.Sleep(1 * time.Second)
+	//}
 }
 
 func clearDB() {

@@ -1,7 +1,7 @@
 cucumber:
 	docker-compose up -d
 	#cd features && godog ./
-	cd features && go test -race -v ./...
+	cd features && go test -v ./...
 	docker-compose stop
 
 run:

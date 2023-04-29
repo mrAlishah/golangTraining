@@ -1,5 +1,5 @@
-@search
-Feature: As a user when I call the search endpoint, I would like to receive a list of kittens
+Feature: search
+  As a user when I call the search endpoint,I would like to receive a list of kittens
 
   Scenario: Invalid query
     Given I have no search criteria

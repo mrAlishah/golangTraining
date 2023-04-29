@@ -4,6 +4,7 @@ look at:
 [sample](https://github.com/cucumber/godog/tree/main/_examples/godogs)
 [youtube time 18](https://www.youtube.com/watch?v=ucLN1T0H5-A)
 [link2](https://medium.com/propertyfinder-engineering/golang-api-testing-with-godog-2de8944d2511)
+[link3](https://github.com/cucumber/godog/blob/5efecbaf107d12241f2a6f9f09dcc1f933241361/_examples/api/README.md)
 
 ## Install
 1.
@@ -40,6 +41,9 @@ add the text above into `features/godogs.feature`
 3. **Step 3** - Create godog step definitions
     - Create and copy the step definitions "godogsPure_test.go.pure" into a new file by running `godogs_test.go`
     - Run `go test` in the godogs directory
+```go
+godog ./features/godogs.feature
+```
 4. **Step 4** - Create the main program to test
  create your logic code.like `godogs.go`
 5. **Step 5** - Add some test logic to the step definitions
@@ -47,4 +51,13 @@ add the text above into `features/godogs.feature`
 6. **Step 6** - run test
 ```go
 go test -v godogs_test.go
+```
+
+Notes: 
+- it Sometime needs to move folder into $GOPATH
+- if you have this error:
+"failed to compile testmain package: exit status 1 - output: compile: /var/folders/n9/m54nxwb5133cvnr0289zcb9h0000gn/T/go-build1244285593/b001/importcfg.link:185: unknown directive "modinfo""<br/>
+just install this:<br/>
+```go
+go install github.com/cucumber/godog/cmd/godog@latest
 ```
