@@ -142,3 +142,38 @@ Happy path
         Then I should receive a list of kittens
 ```
 From an automation perspective what we then do is to write the steps which correspond to each of these `Given, When, and Then` statements.
+Look at 05-simple_godogs sample. [here](./05-simple_godogs)
+Look at 06-TestingBDD sample. [here](./06-TestingBDD)
+## Benchmarks
+To run benchmark
+```
+> go test -bench=. -benchmem
+PASS
+ok      docker-compose  0.598s
+```
+
+One of the other nice features of benchmark tests is that we can run them and it outputs profiles which can be used with pprof:
+```
+chapter4> go test -bench=. -cpuprofile=cpu.prof -blockprofile=block.prof -memprofile=mem.prof
+```
+Look at 07-BenchmarkProfiling sample. [here](./07-BenchmarkProfiling)
+
+### Profiling
+When we wish to take a look at the speed of our program, the best technique we can employ is profiling. Profiling automatically samples your running application while it is executing; and then we can compute that data, such as the running time of a particular function, into a statistical summary called a profile.<br/>
+Go supports three different types of profiling:
+* CPU: Identifies the tasks which require the most CPU time 
+* Heap: Identifies the statements responsible for allocating the most memory 
+* Blocking: Identifies the operations responsible for blocking Go routines for the longest time
+
+If we would like to enable profiling on our application, we can do one of two things:
+* Add import "net/http/pprof" to your startup file and open it at :`http://localhost:6060/debug/pprof/` <br/>
+  The side effect of this, however, is that when this import statement is in your go file,
+  - then you will be profiling, which not only could slow down your application, 
+  - but you also don't want to expose this information for public consumption.
+* Manually start profiling
+
+> go run mainManually.go -cpuprofile ./handlers/cpu.prof -memprofile ./hendlers/heap.prof
+> go tool pprof ./mainManually ./handlers/cpu.prof
+
+> brew install graphviz
+> apt-get install graphviz
