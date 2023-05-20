@@ -210,6 +210,13 @@ Auto2:
 
 ### Read prompt variable
 ```shell
+answer:
+	@read -p  "Username:" uname; \
+	echo "hi $$uname"
+```
+or 
+
+```shell
 USERNAME ?= $(shell bash -c 'read -p "Username: " username; echo $$username')
 PASSWORD ?= $(shell bash -c 'read -s -p "Password: " pwd; echo $$pwd')
 

@@ -106,3 +106,8 @@ talk:
 	#@clear
 	@echo "Username › $(USERNAME)"
 	@echo "Password › $(PASSWORD)"
+
+# Read Variables ---------------------------------
+answer:
+	@read -p  "Username:" uname; \
+	echo "hi $$uname"
