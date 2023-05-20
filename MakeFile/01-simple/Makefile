@@ -97,3 +97,12 @@ Auto1:
 
 Auto2:
 	echo "two"
+
+# Read Variables ---------------------------------
+USERNAME ?= $(shell bash -c 'read -p "Username: " username; echo $$username')
+PASSWORD ?= $(shell bash -c 'read -s -p "Password: " pwd; echo $$pwd')
+
+talk:
+	#@clear
+	@echo "Username › $(USERNAME)"
+	@echo "Password › $(PASSWORD)"
