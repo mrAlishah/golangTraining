@@ -1,17 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"unsafe"
+)
 
 type RichError interface {
 	WithMessage(msg string) RichError
 	WithOp(op string) RichError
 	Error() string
 	String() string
+	ToJson() string
 }
 
 type richError struct {
-	op      string
-	message string
+	op      string `json:"op"`
+	message string `json:"message"`
 }
 
 func RichErrorNew() RichError {
@@ -26,6 +31,21 @@ func (r *richError) WithOp(op string) RichError {
 func (r *richError) WithMessage(msg string) RichError {
 	r.message = msg
 	return r
+}
+
+func (r *richError) ToJson() string {
+	fmt.Printf("richError: %+v | size: %d | Type: %T \n", r, unsafe.Sizeof(r), r)
+	// convert the interface value to a map
+	m := map[string]interface{}{
+		"op":      r.op,
+		"message": r.message,
+	}
+
+	bytes, err := json.Marshal(m)
+	if err != nil {
+		return "struct is not json serializable"
+	}
+	return string(bytes)
 }
 
 func (r *richError) String() string {
@@ -43,6 +63,7 @@ func main() {
 	ir5 = r5
 	ir5.WithOp("srv5").WithMessage("test5")
 	fmt.Println(ir5)
+	fmt.Println(ir5.ToJson())
 
 	var err error
 	err = ir5
