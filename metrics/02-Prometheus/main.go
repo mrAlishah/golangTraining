@@ -7,13 +7,18 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
+	"math/rand"
 	"net/http"
+	"strconv"
+	"strings"
+	"time"
 )
 
 // ## Define metrics -----------------------------------------------------
 type metrics struct {
-	devices prometheus.Gauge
-	info    *prometheus.GaugeVec
+	devices  prometheus.Gauge
+	info     *prometheus.GaugeVec
+	upgrades *prometheus.CounterVec
 }
 
 // ## Define & Add Gauge to prometheus ------------------------------------
@@ -33,8 +38,15 @@ func NewMetrics(reg prometheus.Registerer) *metrics {
 			Help:      "Information about the My App environment.",
 		},
 			[]string{"version"}),
+
+		// name it device_upgrade_total and give it a description Number of upgraded devices.
+		upgrades: prometheus.NewCounterVec(prometheus.CounterOpts{
+			Namespace: "myapp",
+			Name:      "device_upgrade_total",
+			Help:      "Number of upgraded devices.",
+		}, []string{"type"}),
 	}
-	reg.MustRegister(m.devices, m.info)
+	reg.MustRegister(m.devices, m.info, m.upgrades)
 	return m
 }
 
@@ -96,7 +108,10 @@ func main() {
 
 	dMux := http.NewServeMux()
 	rdh := registerDevicesHandler{metrics: m}
+	mdh := manageDevicesHandler{metrics: m}
+
 	dMux.Handle("/devices", rdh)
+	dMux.Handle("/devices/", mdh)
 
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", dMux))
@@ -152,4 +167,57 @@ func createDevice(w http.ResponseWriter, r *http.Request, m *metrics) {
 
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("Device created!"))
+}
+
+type manageDevicesHandler struct {
+	metrics *metrics
+}
+
+// curl -X PUT -d '{"firmware": "2.3.0"}' localhost:8080/devices/1
+//
+//	hey -n 100000 -c 1 -q 2 -m PUT -d '{"firmware": "2.03.00"}' http://localhost:8080/devices/1
+func (mdh manageDevicesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "PUT":
+		upgradeDevice(w, r, mdh.metrics)
+	default:
+		w.Header().Set("Allow", "PUT")
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func upgradeDevice(w http.ResponseWriter, r *http.Request, m *metrics) {
+	path := strings.TrimPrefix(r.URL.Path, "/devices/")
+
+	id, err := strconv.Atoi(path)
+	if err != nil || id < 1 {
+		http.NotFound(w, r)
+	}
+
+	var dv Device
+	err = json.NewDecoder(r.Body).Decode(&dv)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	for i := range dvs {
+		if dvs[i].ID == id {
+			dvs[i].Firmware = dv.Firmware
+		}
+	}
+
+	sleep(1000)
+
+	m.upgrades.With(prometheus.Labels{"type": "router"}).Inc()
+
+	w.WriteHeader(http.StatusAccepted)
+	w.Write([]byte("Upgrading..."))
+}
+
+func sleep(ms int) {
+	rand.Seed(time.Now().UnixNano())
+	now := time.Now()
+	n := rand.Intn(ms + now.Second())
+	time.Sleep(time.Duration(n) * time.Millisecond)
 }
