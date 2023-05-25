@@ -95,13 +95,33 @@ func main() {
 	}()
 
 	dMux := http.NewServeMux()
-	dMux.HandleFunc("/devices", getDevices)
+	rdh := registerDevicesHandler{metrics: m}
+	dMux.Handle("/devices", rdh)
 
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", dMux))
 	}()
 
 	select {}
+}
+
+type registerDevicesHandler struct {
+	metrics *metrics
+}
+
+// curl -d '{"id": 3, "mac": "96-40-D1-32-D7-1A", "firmware": "3.03.00"}' localhost:8080/devices
+// curl -X POST localhost:8080/devices -H "Content-Type: application/json" -d '{"id": 3, "mac": "96-40-D1-32-D7-1A", "firmware": "3.03.00"}'
+// curl localhost:8080/devices
+func (rdh registerDevicesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+		getDevices(w, r)
+	case "POST":
+		createDevice(w, r, rdh.metrics)
+	default:
+		w.Header().Set("Allow", "GET, POST")
+		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+	}
 }
 
 func getDevices(w http.ResponseWriter, r *http.Request) {
@@ -114,4 +134,22 @@ func getDevices(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(b)
+}
+
+func createDevice(w http.ResponseWriter, r *http.Request, m *metrics) {
+	var dv Device
+
+	err := json.NewDecoder(r.Body).Decode(&dv)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	dvs = append(dvs, dv)
+
+	// m.devices.Inc()
+	m.devices.Set(float64(len(dvs)))
+
+	w.WriteHeader(http.StatusCreated)
+	w.Write([]byte("Device created!"))
 }
