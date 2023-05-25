@@ -1,0 +1,17 @@
+---
+#For the scrape interval, you can use such small values, but in production, you want to increase them to at least 15 or 30 seconds.
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+# We're not going to specify the alertmanager and any rules.
+alerting:
+
+rule_files:
+
+# We'll use static scrape with the domain name of myapp. If you don't use docker-compose and run it locally, just specify localhost:8081.
+scrape_configs:
+  - job_name: myapp
+    static_configs:
+      - targets: ["myapp:8081"]
+# We don't need to provide the /metrics path because it's the default. In case you use any different path, such as /prom-metrics, you'll need to specify it as well.
