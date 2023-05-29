@@ -16,9 +16,11 @@ import (
 
 // ## Define metrics -----------------------------------------------------
 type metrics struct {
-	devices  prometheus.Gauge
-	info     *prometheus.GaugeVec
-	upgrades *prometheus.CounterVec
+	devices       prometheus.Gauge
+	info          *prometheus.GaugeVec
+	upgrades      *prometheus.CounterVec
+	duration      *prometheus.HistogramVec
+	loginDuration prometheus.Summary
 }
 
 // ## Define & Add Gauge to prometheus ------------------------------------
@@ -45,8 +47,27 @@ func NewMetrics(reg prometheus.Registerer) *metrics {
 			Name:      "device_upgrade_total",
 			Help:      "Number of upgraded devices.",
 		}, []string{"type"}),
+
+		duration: prometheus.NewHistogramVec(prometheus.HistogramOpts{
+			Namespace: "myapp",
+			Name:      "request_duration_seconds",
+			Help:      "Duration of the request.",
+			// 4 times larger for apdex score
+			// Buckets: prometheus.ExponentialBuckets(0.1, 1.5, 5),
+			// Buckets: prometheus.LinearBuckets(0.1, 5, 5),
+			Buckets: []float64{0.1, 0.15, 0.2, 0.25, 0.3},
+		}, []string{"status", "method"}),
+
+		//ogin_request_duration_seconds.
+		//When you declare the summary metric, you can specify percentiles instead of buckets. Here we have the same p99, p90, and p50 percentile, which is just a median.
+		loginDuration: prometheus.NewSummary(prometheus.SummaryOpts{
+			Namespace:  "myapp",
+			Name:       "login_request_duration_seconds",
+			Help:       "Duration of the login request.",
+			Objectives: map[float64]float64{0.5: 0.05, 0.9: 0.01, 0.99: 0.001},
+		}),
 	}
-	reg.MustRegister(m.devices, m.info, m.upgrades)
+	reg.MustRegister(m.devices, m.info, m.upgrades, m.duration, m.loginDuration)
 	return m
 }
 
@@ -71,7 +92,7 @@ func init() {
 }
 
 /*
-1- go run main.go
+1- docker-compose up --build  //go run main.go
 2- curl localhost:8081/metrics
 */
 func main() {
@@ -110,8 +131,12 @@ func main() {
 	rdh := registerDevicesHandler{metrics: m}
 	mdh := manageDevicesHandler{metrics: m}
 
+	lh := loginHandler{}
+	mlh := middleware(lh, m)
+
 	dMux.Handle("/devices", rdh)
 	dMux.Handle("/devices/", mdh)
+	dMux.Handle("/login", mlh)
 
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", dMux))
@@ -130,7 +155,7 @@ type registerDevicesHandler struct {
 func (rdh registerDevicesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		getDevices(w, r)
+		getDevices(w, r, rdh.metrics)
 	case "POST":
 		createDevice(w, r, rdh.metrics)
 	default:
@@ -139,12 +164,19 @@ func (rdh registerDevicesHandler) ServeHTTP(w http.ResponseWriter, r *http.Reque
 	}
 }
 
-func getDevices(w http.ResponseWriter, r *http.Request) {
+// curl localhost:8080/devices
+// curl localhost:8081/metrics
+func getDevices(w http.ResponseWriter, r *http.Request, m *metrics) {
+	now := time.Now()
+
 	b, err := json.Marshal(dvs)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	sleep(200)
+
+	m.duration.With(prometheus.Labels{"method": "GET", "status": "200"}).Observe(time.Since(now).Seconds())
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -220,4 +252,22 @@ func sleep(ms int) {
 	now := time.Now()
 	n := rand.Intn(ms + now.Second())
 	time.Sleep(time.Duration(n) * time.Millisecond)
+}
+
+type loginHandler struct{}
+
+func (l loginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	sleep(200)
+	w.Write([]byte("Welcome to the app!"))
+}
+
+// Now the middleware. It accepts the http handler and the metrics and returns another http handler. In this way,
+// you can chain as many middleware functions as you want. For this use case, we only want to measure the duration of the request.
+// Let's record time now and then use a similar Observe function right after the http handler.
+func middleware(next http.Handler, m *metrics) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		now := time.Now()
+		next.ServeHTTP(w, r)
+		m.loginDuration.Observe(time.Since(now).Seconds())
+	})
 }
