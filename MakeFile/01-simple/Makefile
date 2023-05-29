@@ -111,3 +111,25 @@ talk:
 answer:
 	@read -p  "Username:" uname; \
 	echo "hi $$uname"
+
+
+# Read Variables ---------------------------------
+#brk := @printf "\n\n -------------------------------------------------- $*\n"
+
+breakln-%:
+	@printf "\n\n -------------------------------------------------- $*\n"
+.SECONDEXPANSION:
+
+Alllines: l1 l2 l3
+
+l1: breakln-$$@
+#    $(brk)
+	echo "line1"
+
+l2: breakln-$$@
+#    $(brk)
+	echo "line2"
+
+l3: breakln-$$@
+#    $(brk)
+	echo "line3"
