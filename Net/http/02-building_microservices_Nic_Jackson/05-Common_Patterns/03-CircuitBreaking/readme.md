@@ -11,8 +11,7 @@ Michael Nygard in his book "Release It" says:
 * Once some requests have been processed without any error, then the circuit again returns to the closed state, and only if the number of failures
   exceeded the error threshold would the circuit open again.
   That gives us a little more context to why we need circuit breakers, but how can we implement them in Go?
-
-![image](../Img/01-circuuit_breaking)
+![image](../Img/01-circuit_breaking.jpg)
 ### Getting Started with Circuit Pattern
 Circuite Pattern can be found at **go-resilience package** , it's called **breaker**. More details : [circuit-breaker](https://github.com/eapache/go-resiliency/blob/master/breaker/README.md)
 
@@ -72,5 +71,5 @@ Breaker open
 
 ### Hystrix from Github
 More details explanation: <br/>
-[Netflix main source](https://github.com/Netflix/Hystrix)
-[Golang Netflix Package source](https://github.com/afex/hystrix-go)
+[Netflix main source](https://github.com/Netflix/Hystrix) <br/>
+[Golang Netflix Package source](https://github.com/afex/hystrix-go)<br/>
