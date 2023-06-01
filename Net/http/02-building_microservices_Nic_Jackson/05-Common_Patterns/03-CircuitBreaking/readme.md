@@ -12,7 +12,7 @@ Michael Nygard in his book "Release It" says:
   exceeded the error threshold would the circuit open again.
   That gives us a little more context to why we need circuit breakers, but how can we implement them in Go?
 
-![image](./Img/01-circuuit_breaking)
+![image](../Img/01-circuuit_breaking)
 ### Getting Started with Circuit Pattern
 Circuite Pattern can be found at **go-resilience package** , it's called **breaker**. More details : [circuit-breaker](https://github.com/eapache/go-resiliency/blob/master/breaker/README.md)
 
