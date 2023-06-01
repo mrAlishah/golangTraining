@@ -8,18 +8,18 @@ In this pattern, a timer is set when an event or request is made, and if the exp
 
 To create timeout for any service, we follow steps below:
 **Step 1:** Use go-resiliency package to create a instance deadline to set timeout
-```
+```go
 dl := deadline.New(1 * time.Second)
 ```
 **Step 2:** Use instance deadline to run our service
-```
+```go
 err := dl.Run(func(stopper <-chan struct{}) error {
 		slowFunction() <=============== This is our service
 		return nil
 	})
 ```
 **Step 3:** Write a business logic to deal with this failure, such as retrying or sending a failure message back to the upstream service
-```
+```go
 	switch err {
 	case deadline.ErrTimedOut:
 		fmt.Println("Timeout")
@@ -60,3 +60,9 @@ err := dl.Run(func(stopper <-chan struct{}) error {
 	}
 
 ```
+
+### Context package
+Package context defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.<br/>
+More details: [here](https://pkg.go.dev/context)
+
+### Note: Implement timeout using Context
