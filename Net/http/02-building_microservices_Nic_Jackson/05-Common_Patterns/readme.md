@@ -87,3 +87,10 @@ The basic idea behind the Backoff pattern is to gradually increase the wait time
 There are several variations of the Backoff pattern, including fixed, linear, exponential, and random backoff. Each variation has its own advantages and disadvantages, depending on the specific use case and requirements of the system.<br/>
 Overall, the Backoff pattern is a useful tool for building resilient and fault-tolerant microservices that can handle network failures gracefully.<br/>
 To create backoff for any service, we follow [link](./02-BackOff/readme.md)
+
+### 3- Circuite Breaking
+We have looked at some patterns like timeouts and back-offs, which help protect our systems from cascading failure in the instance of an outage. However, now it's time to introduce another pattern which is complementary to this duo. Circuit breaking is all about failing fast.<br/>
+The Circuit Breaker pattern is a design pattern used in microservices architecture to prevent cascading failures and improve the resilience of distributed systems. It is essentially a safety mechanism that monitors service calls and prevents them from causing failures in the system when there is network congestion or service disruptions.<br/>
+The Circuit Breaker pattern works by wrapping calls to remote services with a circuit breaker object, which tracks the number of failures and opens the circuit if the failure rate exceeds a certain threshold. Once the circuit is open, subsequent calls to the service are blocked for a specified period, allowing the service to recover before being called again. If the service recovers and begins responding normally, the circuit is closed again, and requests can be made to it.<br/>
+By using the Circuit Breaker pattern, microservices can degrade gracefully when under stress, preventing catastrophic system failures and improving overall system availability and reliability.<br/>
+More details:[link](./03-CiruitBreaking/readme.md)
