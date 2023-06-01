@@ -26,7 +26,7 @@ We construct our circuit breaker with three parameters:
 * The timeout, is the time that the circuit will stay in the open state before changing to half-open
 
 Design circuit pattern
-```
+```go
 	b := breaker.New(3, 1, 5*time.Second)
 
 	for {
