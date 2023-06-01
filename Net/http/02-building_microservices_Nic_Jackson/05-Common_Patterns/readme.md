@@ -69,6 +69,21 @@ A timeout is an incredibly useful pattern while communicating with other service
 
 The Timeout pattern is a common pattern used in event-driven systems to handle situations where a response to an event or request has not been received within a specified timeframe.<br/>
 In this pattern, a timer is set when an event or request is made, and if the expected response is not received before the timer expires, a timeout event is triggered. The system can then take appropriate action based on the timeout event, such as retrying the request or notifying the user that the operation has failed.<br/>
+In the context of microservices, the Timeout pattern is a strategy used for handling situations where a microservice does not respond within an expected timeframe.<br/>
+When one microservice sends a request to another microservice, it may need to wait for a response before proceeding with its work. However, if the response takes too long, this could cause a delay or even a failure in the overall process.<br/>
+To avoid such issues, the Timeout pattern can be used. When a microservice sends a request to another microservice, it sets a maximum time for the response to be received. If the response is not received within that time, the requesting microservice can assume that the other microservice is unavailable or has failed and take appropriate action, such as sending an error message to the user or retrying the request.<br/>
+Timeouts are critical in microservices architecture because they help to prevent cascading failures and ensure that the system remains stable even when some of the microservices become unresponsive.<br/>
 
 To create timeout for any service, we follow [link](./01-Timeouts/readme.md)
+### Context package
+Package context defines the Context type, which carries deadlines, cancellation signals, and other request-scoped values across API boundaries and between processes.<br/>
+More details: [here](https://pkg.go.dev/context)
 
+### Note: Implement timeout using Context is good solution and best way .
+
+### 2- Back off
+The Backoff pattern is a technique used to handle network failures and reduce the impact of those failures on the system. It involves waiting for a certain amount of time before retrying an operation that has failed due to a network failure or other issues.<br/>
+The basic idea behind the Backoff pattern is to gradually increase the wait time between retries, with the aim of reducing the number of requests sent to a failing service while still allowing time for the service to recover. This helps to prevent overwhelming the service with too many requests and causing further problems.<br/>
+There are several variations of the Backoff pattern, including fixed, linear, exponential, and random backoff. Each variation has its own advantages and disadvantages, depending on the specific use case and requirements of the system.<br/>
+Overall, the Backoff pattern is a useful tool for building resilient and fault-tolerant microservices that can handle network failures gracefully.<br/>
+To create backoff for any service, we follow [link](./02-BackOff/readme.md)
