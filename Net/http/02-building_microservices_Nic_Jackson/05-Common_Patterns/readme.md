@@ -137,3 +137,64 @@ In contrast to server-side discovery, where a central component manages the rout
 * You still hook into a dynamic service registry to get the information for the services you are going to call. This logic is localized in each client, so it is possible to handle the failure logic on a case-by-case basis.
 
 * ![Client-side service discovery](./Img/03-Client-side_service_discovery.jpg)
+
+### 6- Load balancing
+When we discussed service discovery, we examined the concepts of server-side and client-side discovery. My personal preference is to look at client side for any internal calls as it affords you greater control over the logic of retries on a case by case basis.<br/>
+In a microservices architecture, a load balancer is a component that distributes incoming network traffic across multiple instances of a service. The goal of using a load balancer is to evenly distribute the load and prevent any one instance from becoming overwhelmed with requests.<br/>
+Load balancing is an important aspect of microservices architecture because it allows for scalability and high availability. By distributing traffic across multiple instances of a service, load balancers can route around failures and ensure that the system remains responsive even as demand fluctuates.<br/>
+There are several different types of load balancers that can be used in a microservices architecture, including hardware load balancers, software load balancers, and cloud-based load balancers. Each type has its own advantages and disadvantages, and the choice of which one to use will depend on factors such as cost, scalability requirements, and deployment environment.<br/>
+I have created a simple implementation of a load balancer. We create it by calling **NewLoadBalancer** which has the following signature:
+- a strategy, an interface that contains the selection logic for the endpoints
+- and a list of endpoints.
+```go
+func NewLoadBalancer(strategy Strategy, endpoints []url.URL) *LoadBalancer
+```
+
+To be able to implement multiple strategies for the load balancer, such as round-robin, random, or more sophisticated strategies
+like distributed statistics, across multiple instances you can define your own strategy which has the following interface:
+```go
+// Strategy is an interface to be implemented by loadbalancing
+// strategies like round robin or random.
+type Strategy interface {
+    NextEndpoint() url.URL
+    SetEndpoints([]url.URL)
+}
+
+NextEndpoint() url.URL
+```go
+This is the method which will return a particular endpoint for the strategy. It is not called directly, but it is called internally by
+the **LoadBalancer package** when you call the GetEndpoint method. This has to be a public method to allow for strategies to be
+included in packages outside of the LoadBalancer package:
+
+
+```go
+SetEndpoints([]url.URL)
+```
+This method will update the Strategy type with a list of the currently available endpoints. Again, this is not called directly but
+is called internally by the LoadBalancer package when you call the UpdateEndpoints method.
+
+To use the LoadBalancer package, you just initialize it with your chosen strategy and a list of endpoints, then by calling
+GetEndpoint, you will receive the next endpoint in the list:
+```go
+func main() {
+	endpoints := []url.URL{
+		url.URL{Host: "www.google.com"},
+		url.URL{Host: "www.google.co.uk"},
+	}
+
+	lb := NewLoadBalancer(&RandomStrategy{}, endpoints)
+
+	fmt.Println(lb.GetEndpoint())
+}
+
+```
+### Run it
+To run it
+```go
+go run main.go
+```
+
+Could you explain this output
+```go
+{   www.google.com   false   }
+```
