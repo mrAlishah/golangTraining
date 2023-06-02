@@ -100,3 +100,11 @@ Health check is a pattern widely used in microservices architectures to ensure t
 In a microservices architecture, where multiple services work together to provide a business function, it is essential to ensure that each service is available and responsive. Health checks help in achieving this goal by monitoring the services and providing alerts if any service is down or not responding correctly. This enables quick recovery and helps prevent cascading failures in the system.<br/>
 Health checks can be implemented in different ways depending on the technology stack and infrastructure used. Some common methods include HTTP endpoints, TCP probes, and database queries. Tools like Kubernetes provide built-in support for health checks that can be easily configured and monitored.<br/>
 More details:[link](./04-HealthCheck/readme.md)
+
+### 5-Throttling (Rate Limiting)
+Throttling is a pattern in microservices architecture that refers to the practice of limiting the number of requests made to a service within a certain period. This is done to prevent overloaded services, which can lead to reduced performance, increased latency, and even failures.<br/>
+Throttling can be implemented at various levels:<br/>
+1. Application level: In this approach, the application itself implements throttling logic to limit the number of incoming requests. For example, the application may allow a certain number of requests per second or minute from each client.
+2. API Gateway level: An API gateway can be used to control the traffic between clients and services. The gateway can enforce rate limits and quotas on incoming requests, monitor traffic, and provide analytics.
+3. Service level: Throttling can also be implemented at the individual service level, where the service sets its own limits for incoming requests.
+Throttling can help prevent service degradation, improve reliability, and ensure fair usage of resources among clients. However, it's important to strike the right balance between throttling and allowing sufficient traffic to meet business requirements.
