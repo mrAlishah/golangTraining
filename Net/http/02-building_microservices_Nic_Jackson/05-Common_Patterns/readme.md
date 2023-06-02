@@ -107,4 +107,33 @@ Throttling can be implemented at various levels:<br/>
 1. Application level: In this approach, the application itself implements throttling logic to limit the number of incoming requests. For example, the application may allow a certain number of requests per second or minute from each client.
 2. API Gateway level: An API gateway can be used to control the traffic between clients and services. The gateway can enforce rate limits and quotas on incoming requests, monitor traffic, and provide analytics.
 3. Service level: Throttling can also be implemented at the individual service level, where the service sets its own limits for incoming requests.
-Throttling can help prevent service degradation, improve reliability, and ensure fair usage of resources among clients. However, it's important to strike the right balance between throttling and allowing sufficient traffic to meet business requirements.
+Throttling can help prevent service degradation, improve reliability, and ensure fair usage of resources among clients. However, it's important to strike the right balance between throttling and allowing sufficient traffic to meet business requirements.<br/>
+More details:[link](./05-Throttling/readme.md)
+
+### 5- Service discovery
+n a microservices architecture, service discovery refers to the mechanism by which services can discover and communicate with other services within the same system.<br/>
+Service discovery allows services to discover information about other services, such as their location, IP address, and available endpoints. This information is typically stored in a registry or directory, which acts as a central point of reference for all the services in the system.<br>
+When a service wants to communicate with another service, it can use the information from the registry to locate the service and its endpoints. This allows services to be decoupled from each other, as they do not need to know the specific location or implementation details of other services in the system.<br/>
+Service discovery is an important aspect of microservices architecture as it enables the system to be more flexible and scalable. Without service discovery, services would need to have knowledge of each other's location and implementation details, which can create tight coupling and make it difficult to modify or scale the system.<br/>
+
+### 5-1- Server-side service discovery
+Server-side service discovery is a type of service discovery in microservices architecture where the responsibility of discovering and locating services is handled by the server or the infrastructure layer.<br/>
+In this approach, each service registers itself with a central registry or directory when it starts up. The registry contains information such as the service's name, IP address, port number, and other metadata that describe the service. When a client needs to communicate with a particular service, it queries the registry for the location of the desired service.<br/>
+The advantages of server-side service discovery include simplicity and ease of use. Since the server is responsible for maintaining the registry, clients do not need to know how to locate services themselves. This means that clients can be simpler and more lightweight, which can be especially important in resource-constrained environments.<br/>
+However, one potential disadvantage of server-side service discovery is that it can create a single point of failure. If the registry goes down, all services that rely on it may be unable to communicate with each other. To mitigate this risk, many implementations of server-side service discovery incorporate mechanisms for redundancy and failover.<br/>
+* The problem with this approach is that the reverse proxy starts to become a bottleneck.this pattern introduces latency.
+* Then what about consistency: you are potentially going to have two different failure patterns in your code for downstream calls, one for internal services and one for external. This is only going to add to the confusion.
+* The biggest problem for me, however, is that you have to centralize this failure logic.
+* To my mind, the worst implementation of this pattern is the one that abstracts all this knowledge from the client, retrying internally, and never letting the calling client know what is happening until success or catastrophic failure.
+
+* ![Server-side service discovery](./Img/02-Server-side_service_discovery.jpg)
+
+### 5-2- Client-side service discovery
+Client-side service discovery is a technique used in microservices architecture to locate and communicate with other services within the system. In this approach, the responsibility of discovering available services is handled by the clients themselves rather than relying on a centralized registry or load balancer.<br/>
+When a client needs to make a request to a particular service, it queries a service registry or discovery server to obtain the location of the service instances. The registry responds with a list of available instances, and the client selects one to use for the current request. This allows the client to make intelligent decisions about which instances to use based on factors such as availability, latency, and geographic proximity.<br/>
+In contrast to server-side discovery, where a central component manages the routing of requests to available service instances, client-side discovery offers greater flexibility and scalability. Each client can implement its own customized load-balancing and failover strategies, reducing the burden on the central component and improving overall system performance and reliability.<br/>
+* This gives you greater control over what happens when a failure occurs.You can implement the business logic on a retry of a failure on a case-by-case basis, and this will also protect you against cascading failure.
+* the client is responsible for the service discovery and load balancing.
+* You still hook into a dynamic service registry to get the information for the services you are going to call. This logic is localized in each client, so it is possible to handle the failure logic on a case-by-case basis.
+
+* ![Client-side service discovery](./Img/03-Client-side_service_discovery.jpg)
