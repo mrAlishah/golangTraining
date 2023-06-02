@@ -198,3 +198,9 @@ Could you explain this output
 ```go
 {   www.google.com   false   }
 ```
+
+### 7- Caching
+One way you can improve the performance of your service is by caching results from databases and other downstream calls in an in-memory cache or a side cache like Redis, rather than by hitting a database every time.<br/>
+Typically, a database is limited by the amount of data that can be read and written from the disk and the time it takes for the CPU to process this information.With an in-memory cache, this limitation is removed by using pre-aggregated data, which is stored in fast memory, not onto a state-full device like a disk.<br/>
+We first need to ask ourselves is it essential that all these clients receive the updated information at the same time or is a one second delay quite acceptable. More often than not it is acceptable, and the speed and cost benefits you gain are well worth the potential cost that a connecting client does not get the up-to-date information exactly after it has been written to the database.<br/>
+Caching strategies can be calculated based on your requirements for this consistency. In theory, the longer your cache expiry,the greater your cost saving, and the faster your system is at the expense of reduced consistency.<br/>
