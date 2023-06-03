@@ -1,5 +1,5 @@
 # golang Microservice Frameworks
-![framework attributes](./Img/1-framework_attributes.jpg)
+![framework attributes](./Img/01-framework_attributes.jpg)
 * **Ability to interface with other frameworks:** It must be possible to interact with any service built with the framework by clients who are not built using the same framework.
   * **Implement standards:** A standard message protocol should be used to maximize interaction, for example:
     * JSON-RPC
@@ -90,14 +90,14 @@
 
 ### comparison 
 we will be running our example service in Docker on a small Digital Ocean host with two CPU cores and 2 GB of RAM. We will then use another server of the same size to execute the benchmarking application.
-![06-comparison.jpg](Img%2F06-comparison.jpg)<br/>
+![06-comparison.jpg](./Img/06-comparison.jpg)<br/>
 **HTTP-JSON** <br/>
-![02-vanilla JSON HTTP.jpg](Img%2F02-vanilla%20JSON%20HTTP.jpg)
+![02-vanilla JSON HTTP.jpg](./Img/02-vanilla%20JSON%20HTTP.jpg)<br/>
 **go-Micro** <br/>
-![03-go-micro.jpg](Img%2F03-go-micro.jpg) <br/>
+![03-go-micro.jpg](./Img/03-go-micro.jpg) <br/>
 **Kite**<br/>
-![04-Kite.jpg](Img%2F04-Kite.jpg)<br/>
+![04-Kite.jpg](./Img/04-Kite.jpg)<br/>
 **gRPC**<br/>
-![05-gRPC.jpg](Img%2F05-gRPC.jpg)
+![05-gRPC.jpg](./Img/05-gRPC.jpg)
 
 
