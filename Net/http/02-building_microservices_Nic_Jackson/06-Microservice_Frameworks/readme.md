@@ -87,6 +87,8 @@
 [gRPC-go](https://github.com/grpc/grpc-go)<br/>
 [Quick start](https://grpc.io/docs/languages/go/quickstart/)<br/>
 [Protocol Buffer Compiler Installation](https://grpc.io/docs/protoc-installation/)<br/>
+## go-kit
+[go-kit](https://github.com/go-kit/kit)
 
 ### comparison 
 we will be running our example service in Docker on a small Digital Ocean host with two CPU cores and 2 GB of RAM. We will then use another server of the same size to execute the benchmarking application.
