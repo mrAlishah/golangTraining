@@ -93,6 +93,8 @@
 [gizmo](https://github.com/nytimes/gizmo)
 ## gotalk
 [gotalk](https://github.com/rsms/gotalk)
+## circuit
+[circuit](https://github.com/gocircuit/circuit)
 
 
 ### comparison 
