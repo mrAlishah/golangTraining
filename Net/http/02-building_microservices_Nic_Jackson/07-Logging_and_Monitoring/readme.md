@@ -152,9 +152,9 @@ however, when it comes to graphing, Grafana leads the way.<br/>
 Let's spin up a Docker Compose stack for our list, kittenservice, so we can run through the simple steps of setting up
 Prometheus with Grafana with Docker Compose.
 If we look at the Docker compose file, we can see that we have three entries:
-* statsD
-* grafana
-* prometheus
+* **statsD:** that provides a simple interface for sending metrics to StatsD.The Statsd Go client allows developers to easily instrument their applications and send metrics to StatsD for monitoring and analysis. It supports various metric types such as counters, gauges, timers.
+* **grafana:** is an open-source platform for visualizing and analyzing data, particularly time-series data, from various sources.
+* **prometheus:** is a popular open-source monitoring system and time-series database.It is designed to collect metrics from various sources, store them in a time-series database, and provide a powerful query language for analyzing and alerting on those metrics.
 
 ```dockerfile
 prometheus:
@@ -165,4 +165,180 @@ volumes:
 - ./prometheus.yml:/etc/prometheus/prometheus.yml
 ports:
 - 9090:9090
+```
+
+### Grafana
+[Documentation](https://grafana.com/docs/grafana/latest/developers/http_api/data_source/)
+
+## Logging
+When working with highly distributed containers, you may have 100 instances of your application running rather than one or
+two. This means that if you need to grep your log files, you will be doing this over hundreds of files instead of just a couple.<br/>
+To save the trouble, the best way to solve this problem is not to write the logs to
+disk in the first place. A distributed logging store, such as an ELK stack, or software as a service platform, such as Logmatic or
+Loggly, solve this problem for us and give us a fantastic insight into the health and operating condition of our system.<br/>
+My personal preference is to only store log data for short periods of time, such as 30 days; this allows you to maintain
+diagnostic traces which could be useful for troubleshooting without the cost of maintaining historical data. For historical data, a
+metrics platform is best, as you can cheaply store this data over a period of years, which can be useful to compare current
+performance with that of a historic event.
+
+### Distributed tracing with Correlation IDs
+we used the **header X-Request-ID** which allows us to mark all the service calls for
+an individual request with the same ID so that we can later query them.we looked at the header X-Request-ID which allows us to mark all the service calls for
+an individual request with the same ID so that we can later query them.
+```go
+func (c *correlationHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+   if r.Header.Get("X-Request-ID") == "" {
+   r.Header.Set("X-Request-ID", uuid.New().String())
+   }
+   c.next.ServeHTTP(rw, r)
+}
+```
+The handler is implemented using the middleware pattern when we wish to use it all we need to do is wrap the actual handler
+like so:
+```go
+http.Handle("/helloworld", handlers.NewCorrelationHandler(validation))
+```
+depending upon your requirements you may like to check out **Zipkin** is a distributed tracing system designed to trouble shoot
+latency, which is becoming incredibly popular http://zipkin.io. There are also tools from **DataDog**, **NewRelic**, and **AWS X-
+Ray**, it is too much to go into depth into these applications, however, please spend an hour and familiarize yourself with their
+capabilities as you never know when you are going to need them.
+
+### Elasticsearch, Logstash, and Kibana (ELK)
+Elasticsearch, Logstash, and Kibana are pretty much the industry standard when it comes to logging verbose data. All of the
+output which would traditionally be streamed to a log file is stored in a central location which you can query with a graphical
+interface tool, Kibana.
+* **Logstash:** is an open-source data processing pipeline that helps to collect, parse, and store logs for future use.The processed data can then be sent to various destinations, such as Elasticsearch, for indexing and analysis.
+* **Elasticsearch:** is a popular open-source search and analytics engine that is often used in logging to help manage and analyze log data. It allows for fast, scalable, and flexible searching and querying of large volumes of data, making it well-suited for logging use cases where organizations need to store and retrieve logs from various sources.
+* **Kibana:** is an open-source data visualization and exploration tool used in logging to help users understand and gain insights from log data.With Kibana, users can create custom dashboards, visualizations, and reports to analyze log data.
+
+Logstash can be used to collect logs from various sources and parse them into structured data, which is then sent to Elasticsearch for indexing and storage. Kibana can be used to visualize and explore the log data, allowing users to search, filter, and drill down into specific events or patterns within their log data.
+
+If we look at our Docker Compose file, you will see three entries for our ELK stack:
+```dockerfile
+elasticsearch:
+image: elasticsearch:2.4.2
+ports:
+- 9200:9200
+- 9300:9300
+  environment:
+  ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+  kibana:
+  image: kibana:4.6.3
+  ports:
+- 5601:5601
+  environment:
+- ELASTICSEARCH_URL=http://elasticsearch:9200
+  links:
+- elasticsearch
+  logstash:
+  image: logstash
+  command: -f /etc/logstash/conf.d/
+  ports:
+- 5000:5000
+  volumes:
+- ./logstash.conf:/etc/logstash/conf.d/logstash.conf
+  links:
+- elasticsearch
+```
+* Elasticsearch is our datastore for our logging data, 
+* Kibana is the application we will use for querying this data, 
+* and Logstash is used for reading the data from your application logs and storing it in Elasticsearch.
+
+logstash config:[documents](https://www.elastic.co/guide/en/logstash/current/configuration.html)
+```json
+input {
+   tcp {
+   port => 5000
+   codec => "json"
+   type => "json"
+   }
+}
+## Add your filters / logstash plugins configuration here
+output {
+elasticsearch {
+   hosts => "elasticsearch:9200"
+   }
+}
+```
+
+### Logrus
+we are using the Logstash plugin which allows you to send our logs direct to the Logstash endpoint rather than writing them to a file and then having Logstash pick them up:
+```go
+func createLogger(address string) (*logrus.Logger, error) {
+   retryCount := 0
+   
+   l := logrus.New()
+   hostname, _ := os.Hostname()
+   var err error
+   
+   // Retry connection to logstash incase the server has not yet come up
+   for ; retryCount < 10; retryCount++ {
+        conn, err := net.Dial("tcp", address)
+        if err == nil {
+         
+            hook := logrustash.New(
+              conn,
+              logrustash.DefaultFormatter(
+                 logrus.Fields{"hostname": hostname},
+                 ),
+            )
+      
+            l.Hooks.Add(hook)
+            return l, err
+         }
+   
+         log.Println("Unable to connect to logstash, retrying")
+         time.Sleep(1 * time.Second)
+   }
+   
+   log.Fatal("Unable to connect to logstash")
+   return nil, err
+}
+
+```
+Adding plugins to Logrus is very simple. We define the hook which is in a separate package, specifying the connection protocol,
+address, application name, and a fields collection which is always sent to the logger:
+```go
+func NewHookWithFields(protocol, address, appName string, alwaysSentFields logrus.Fields) (*Hook, error)
+```
+We then register the plugin with the logger using the hooks method:
+```go
+func AddHook(hook Hook)
+```
+
+## Exceptions
+Golang has two great methods for handling unexpected errors:
+* **Panic :** The built-in panic function stops the normal execution of the current goroutine. All the deferred functions are run in the normal
+  way then the program is terminated:
+* **Recover:** The recover function allows an application to manage the behavior of a panicking goroutine. When called inside a deferred function, recover stops the execution of the panic and returns the error passed to
+  the call of panic:
+[Look at link](https://medium.com/@jfeng45/go-microservice-with-clean-architecture-application-logging-b43dc5839bce)
+```go
+func catchPanic() {
+	if err := recover(); err != nil {
+		logger.Log.Errorf("%+v\n%s", err,debug.Stack())
+	}
+}
+```
+
+Using software as a service, such as **Datadog** or **Logmatic**, is an excellent
+way to get up and running very quickly, and alerts integration with **OpsGenie** or **PagerDuty** will allow you to receive instant
+alerts whenever a problem may occur.
+
+## summary
+* Prometheus: http://localhost:9090
+* grafana: http://localhost:3000/ <br/>
+user: admin <br/>
+pass: admin <br/>
+
+* kibana: http://localhost:5601
+
+## troubleshooting
+error docker-compose on macos:
+>failed to solve: rpc error: code = Unknown desc = failed to solve with frontend dockerfile.v0: failed to read dockerfile: open /var/lib/docker/tmp/buildkit-mount4245262655/Dockerfile: no such file or directory
+
+solution: before run docker-compose up, run below two commands.
+```shell
+export DOCKER_BUILDKIT=0
+export COMPOSE_DOCKER_CLI_BUILD=0
 ```
