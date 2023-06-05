@@ -156,6 +156,8 @@ If we look at the Docker compose file, we can see that we have three entries:
 * **grafana:** is an open-source platform for visualizing and analyzing data, particularly time-series data, from various sources.
 * **prometheus:** is a popular open-source monitoring system and time-series database.It is designed to collect metrics from various sources, store them in a time-series database, and provide a powerful query language for analyzing and alerting on those metrics.
 
+Metrics Data -> statsD -> prometheus -> grafana
+
 ```dockerfile
 prometheus:
 image: prom/prometheus
@@ -243,6 +245,8 @@ ports:
 * Elasticsearch is our datastore for our logging data, 
 * Kibana is the application we will use for querying this data, 
 * and Logstash is used for reading the data from your application logs and storing it in Elasticsearch.
+
+Log -> Logstash -> ElasticSearch -> Kibana
 
 logstash config:[documents](https://www.elastic.co/guide/en/logstash/current/configuration.html)
 ```json
