@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unicode/utf8"
+)
 
 func converti(s []rune) string {
 	s[6] = 'd'
@@ -11,4 +14,6 @@ func converti(s []rune) string {
 func main() {
 	h := "Hello baby"
 	fmt.Println(converti([]rune(h)))
+	fmt.Println(len(h))
+	fmt.Println(utf8.RuneCountInString(h))
 }
