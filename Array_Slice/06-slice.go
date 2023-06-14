@@ -31,6 +31,11 @@ func main() {
 	}
 
 	s1 := []int{5, 6, 7}
-	slice1 = append(slice1, s1...)
-	fmt.Println("append as variadic into a slice1:", slice1)
+	slice2 := append(slice1, s1...)
+	fmt.Println("append as variadic into a slice1:", slice2)
+
+	slice2[2] = 22
+	fmt.Println(slice1)
+	fmt.Println(slice2)
+
 }
