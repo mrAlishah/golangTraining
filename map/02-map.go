@@ -9,7 +9,7 @@ func main() {
 		"steve": 12000,
 		"jamie": 15000,
 	}
-	newEmp := "steve"
+	newEmp := "steve1"
 	value, ok := employeeSalary[newEmp]
 	if ok == true {
 		fmt.Println("Salary of", newEmp, "is", value)
@@ -17,4 +17,8 @@ func main() {
 	}
 	fmt.Println(newEmp, "not found")
 
+	var m map[int]int
+	//m := make(map[int]int)
+	//m[1] = 2
+	fmt.Println(m)
 }

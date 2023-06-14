@@ -4,6 +4,13 @@ syn:
 ``` 
   make(map[type of key]type of value)
 ```
+This declaration is wrong and raise panic
+```go
+	var m map[int]int
+    //m := make(map[int]int) //this s correct
+	m[1] = 2 //panic: assignment to entry in nil map
+    fmt.Println(m)
+```
 # Adding items to a map
 syn:
 ```
