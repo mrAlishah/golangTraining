@@ -20,3 +20,9 @@
 	go run 10-httpLogger.go
 11:
 	go run 11-httpLogger.go
+12:
+	go run 12-httpclient_get.go
+13:
+	go run 13-httpclient_post.go
+14:
+	go run 14-httpclient_post.go
